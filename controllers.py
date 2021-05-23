@@ -33,8 +33,59 @@ from .models import get_user_email
 
 url_signer = URLSigner(session)
 
-@action('Home')
-@action.uses(db, auth, 'index.html')
-def index():
+@action('')
+@action.uses(db, auth, 'homepage.html')
+def homepage():
+    print("User:", get_user_email())
+    return dict(
+    )
+
+@action('collection')
+@action.uses(db, auth, 'collection.html')
+def collection():
     print("User:", get_user_email())
     return dict()
+
+@action('collection/<item_id:int>')
+@action.uses(db, auth, 'item.html')
+def item():
+    print("User:", get_user_email())
+    return dict()
+
+@action('account')
+@action.uses(db, auth, 'account.html')
+def account():
+    print("User:", get_user_email())
+    return dict()
+
+@action('account/edit')
+@action.uses(db, auth, 'editaccount.html')
+def editaccount():
+    print("User:", get_user_email())
+    return dict()
+
+@action('account/favorites')
+@action.uses(db, auth, 'favorites.html')
+def favorites():
+    print("User:", get_user_email())
+    return dict()
+
+@action('account/wishlist')
+@action.uses(db, auth, 'wishlist.html')
+def wishlist():
+    print("User:", get_user_email())
+    return dict()
+
+@action('cart')
+@action.uses(db, auth, 'cart.html')
+def cart():
+    print("User:", get_user_email())
+    return dict()
+
+@action('support-contact')
+@action.uses(db, auth, 'supportcontact.html')
+def supportcontact():
+    print("User:", get_user_email())
+    return dict()
+    
+# ****************************************************************************** #
