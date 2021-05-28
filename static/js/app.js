@@ -8,12 +8,21 @@ let init = (app) => {
     // This is the Vue data.
 
     app.data = {
-        // Complete.
+        items: [],
+        curr_item_id: 0,
+    };
+
+    app.set_curr_item_id = function (num) {
+
+        axios.post(local_storage_url,
+        {
+            curr_id: num,
+        });
     };
 
     app.methods = {
         // Complete.
-
+        set_curr_item_id: app.set_curr_item_id,
     };
 
     // This creates the Vue instance.
@@ -24,7 +33,9 @@ let init = (app) => {
     });
 
     app.init = () => {
-        // Do any initializations (e.g. networks calls) here.
+        axios.get(load_items_url,{}).then(function (response) {
+            app.vue.items = response.data.rows;
+        });
     };
 
     // Call to the initializer.

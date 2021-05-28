@@ -33,24 +33,34 @@ from .models import get_user_email
 
 url_signer = URLSigner(session)
 
+# Imports to load the json file.
+from .settings import APP_FOLDER
+import os
+import json
+JSON_FILE = os.path.join(APP_FOLDER, "data", "items.json")
+
 @action('')
 @action.uses(db, auth, 'homepage.html')
 def homepage():
-    print("User:", get_user_email())
-    return dict(
-    )
+    return dict()
 
 @action('collection')
 @action.uses(db, auth, 'collection.html')
 def collection():
-    print("User:", get_user_email())
-    return dict()
+    return dict(
+        load_items_url = URL('load_items', signer=url_signer),
+        local_storage_url = URL('local_storage', signer=url_signer),
+    )
 
-@action('collection/<item_id:int>')
-@action.uses(db, auth, 'item.html')
-def item():
-    print("User:", get_user_email())
-    return dict()
+@action('collection-item/<item_id:int>')
+@action.uses(db, auth, 'collection-item.html')
+def item(item_id=None):
+    assert item_id is not None
+    return dict(
+        item_id =item_id,
+        load_items_url = URL('load_items', signer=url_signer),
+        local_storage_url = URL('local_storage', signer=url_signer),
+    )
 
 @action('account')
 @action.uses(db, auth, 'account.html')
@@ -89,3 +99,34 @@ def supportcontact():
     return dict()
     
 # ****************************************************************************** #
+
+@action('local_storage', method="POST")
+@action.uses(url_signer.verify(), db)
+def local_storage():
+    db(db.storage.id > 0).delete()
+    db.storage.insert(
+        # POST requests return json data. Retrieve it.
+        curr_item_id=request.json.get('curr_id'),
+    )
+    return dict()
+
+@action('load_items')
+@action.uses(url_signer.verify(), db)
+def load_items():
+    # Get the data from table.json.
+    data = json.load(open(JSON_FILE))
+    rows=[]
+    
+    if db(db.item).isempty():
+        for x in data:
+            db.item.insert(
+                item_name=x['item_name'],
+                item_description=x['item_description'],
+                item_price=x['item_price'],
+                item_image=x['item_image'],
+                item_ratings_id=x['item_ratings_id'],
+                item_reviews_id=x['item_reviews_id'],
+                item_versions_id=x['item_versions_id'],
+            )
+    rows = db(db.item).select().as_list()
+    return dict(rows=rows)

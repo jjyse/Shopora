@@ -1,0 +1,23 @@
+[[extend 'layout.html']]
+
+<style>
+    [v-cloak] {
+         display: none;
+    }
+</style>
+
+<div class="section" id="vue-target" v-cloak>
+    <div class="section">
+        <h1 class="title">
+            {{ curr_item_id }}
+        </h1>
+    </div>
+</div>
+
+[[block page_scripts]]
+<script>
+  let load_items_url = "[[=XML(load_items_url)]]";
+  let local_storage_url = "[[=XML(local_storage_url)]]";
+</script>
+<script src="js/app.js"></script>
+[[end]]
