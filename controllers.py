@@ -56,10 +56,21 @@ def collection():
 @action.uses(db, auth, 'collection-item.html')
 def item(item_id=None):
     assert item_id is not None
+
+    if db(db.storage).isempty():
+        db.storage.insert(
+            # POST requests return json data. Retrieve it.
+            curr_item_id=item_id,
+        )
+    else:
+        db.storage.truncate()
+        db.storage.insert(
+            # POST requests return json data. Retrieve it.
+            curr_item_id=item_id,
+        )
+
     return dict(
-        item_id =item_id,
         load_items_url = URL('load_items', signer=url_signer),
-        local_storage_url = URL('local_storage', signer=url_signer),
     )
 
 @action('account')
@@ -100,18 +111,8 @@ def supportcontact():
     
 # ****************************************************************************** #
 
-@action('local_storage', method="POST")
-@action.uses(url_signer.verify(), db)
-def local_storage():
-    db(db.storage.id > 0).delete()
-    db.storage.insert(
-        # POST requests return json data. Retrieve it.
-        curr_item_id=request.json.get('curr_id'),
-    )
-    return dict()
-
-@action('load_items')
-@action.uses(url_signer.verify(), db)
+@action('load_items', method=["GET", "POST"])
+@action.uses(db, session)
 def load_items():
     # Get the data from table.json.
     data = json.load(open(JSON_FILE))
@@ -130,3 +131,4 @@ def load_items():
             )
     rows = db(db.item).select().as_list()
     return dict(rows=rows)
+
