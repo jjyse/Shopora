@@ -27,6 +27,9 @@ let init = (app) => {
         axios.get(load_items_url).then(function (response) {
             app.vue.items = response.data.rows;
         });
+        axios.get(load_curr_item_url).then(function (response) {
+            app.vue.curr_item = response.data.rows;
+        });
     };
 
     // Call to the initializer.

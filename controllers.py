@@ -49,7 +49,7 @@ def homepage():
 def collection():
     return dict(
         load_items_url = URL('load_items', signer=url_signer),
-        local_storage_url = URL('local_storage', signer=url_signer),
+        load_curr_item_url = URL('load_curr_item', signer=url_signer),
     )
 
 @action('collection-item/<item_id:int>')
@@ -71,6 +71,7 @@ def item(item_id=None):
 
     return dict(
         load_items_url = URL('load_items', signer=url_signer),
+        load_curr_item_url = URL('load_curr_item', signer=url_signer),
     )
 
 @action('account')
@@ -132,3 +133,26 @@ def load_items():
     rows = db(db.item).select().as_list()
     return dict(rows=rows)
 
+@action('load_curr_item', method=["GET", "POST"])
+@action.uses(db, session)
+def load_curr_item():
+    num = 0
+    rows = []
+    curr_item = []
+
+    rows = db(db.storage).select()
+    for row in rows:
+        num = row.curr_item_id
+
+    for row in db(db.item.item_ratings_id == num).select():
+        curr_item = [{
+            "item_name": row.item_name,
+            "item_description": row.item_description,
+            "item_price": row.item_price,
+            "item_image": row.item_image,
+            "item_ratings_id": row.item_ratings_id,
+            "item_reviews_id": row.item_reviews_id,
+            "item_versions_id": row.item_versions_id,
+        }]
+
+    return dict(rows=curr_item)
