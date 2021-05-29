@@ -17,30 +17,23 @@
       width: 40%;
       float: left;
     }
-    .item-name {
+    .item-name-price {
       height: 10%;
       width: 15%;
       float: left;
       border: 1px solid rgb(224, 224, 224);
     }
-    .item-price {
-      position:absolute;
-      bottom: 0;
+    .item-reviews-buttons {
       height: 100%;
-      width: 100%;
-    }
-    .item-ratings {
-      height: 100%;
-      width: 30%;
+      width: 20%;
+      margin-left: 60px;
       float: left;
       border: 1px solid rgb(224, 224, 224);
-      overflow-y: scroll;
-      overflow-x: hidden;
     }
     .item-reviews {
       height: 100%;
       width: 30%;
-      float: left;
+      float: right;
       border: 1px solid rgb(224, 224, 224);
       overflow-y: scroll;
       overflow-x: hidden;
@@ -73,24 +66,49 @@
                 <div class="item-image">
                     <img v-bind:src="row.item_image">
                 </div>
-                <div class="item-name">
+                <div class="item-name-price">
                     {{ row.item_name }} 
                     <br>
                     {{ row.item_price }}
                 </div>
             </div>
         </div>
-        <!-- *************************Item Ratings*********************************** -->
-        <div class="item-ratings">
-          Ratings
-
-
         <!-- **************************Item Reviews******************************* -->
+        <div class="item-reviews-buttons">
+
+          <!-- ********* Write a review here ********* -->
+          <div v-if="review_post_mode == false">
+            <button class="button is-primary" @click="set_mode(true)">
+                <i class="fa fa-plus fa-fw"></i>
+            </button>
+          </div>
+          <div v-if="review_post_mode">
+            <div class="block">
+                <textarea class="textarea" placeholder="Write your review here" v-model="review_content"></textarea>
+            </div>
+    
+            <div class="block">
+                <a class="button is-primary" @click="add_review">
+                        Post
+                </a>
+                <a class="button is-warning" @click="set_mode(false)">
+                    Cancel
+                </a>
+            </div>
+        </div>
+
         </div>
         <div class="item-reviews">
           Reviews
 
-
+        <!-- ********* Show the list of reviews here ********* -->
+        <div class="notification" v-for="review in reviews.slice().reverse()">
+          <div v-if="review.item_id == curr_item[0].item_id">
+              <div>{{review.review_content}}</div>
+              <div class="has-text-grey">{{review.reviewer_name}}</div>
+          </div>
+        </div>
+        <!-- ************************************************* -->
         </div>
     </div>
 
@@ -100,6 +118,9 @@
 <script>
   let load_items_url = "[[=XML(load_items_url)]]";
   let load_curr_item_url = "[[=XML(load_curr_item_url)]]";
+  let load_reviews_url = "[[=XML(load_reviews_url)]]";
+  let add_review_url = "[[=XML(add_review_url)]]";
+  let delete_review_url = "[[=XML(delete_review_url)]]";
 </script>
 <script src="js/app.js"></script>
 [[end]]

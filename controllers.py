@@ -50,6 +50,9 @@ def collection():
     return dict(
         load_items_url = URL('load_items', signer=url_signer),
         load_curr_item_url = URL('load_curr_item', signer=url_signer),
+        load_reviews_url = URL('load_reviews', signer=url_signer),
+        add_review_url = URL('add_review', signer=url_signer),
+        delete_review_url = URL('delete_review', signer=url_signer),
     )
 
 @action('collection-item/<item_id:int>')
@@ -72,6 +75,9 @@ def item(item_id=None):
     return dict(
         load_items_url = URL('load_items', signer=url_signer),
         load_curr_item_url = URL('load_curr_item', signer=url_signer),
+        load_reviews_url = URL('load_reviews', signer=url_signer),
+        add_review_url = URL('add_review', signer=url_signer),
+        delete_review_url = URL('delete_review', signer=url_signer),
     )
 
 @action('account')
@@ -110,7 +116,7 @@ def supportcontact():
     print("User:", get_user_email())
     return dict()
     
-# ****************************************************************************** #
+# **************************** Controllers for items ********************************* #
 
 @action('load_items', method=["GET", "POST"])
 @action.uses(db, session)
@@ -143,6 +149,7 @@ def load_curr_item():
 
     for row in db(db.item.id == num).select():
         curr_item = [{
+            "item_id": row.id,
             "item_name": row.item_name,
             "item_description": row.item_description,
             "item_price": row.item_price,
@@ -150,3 +157,46 @@ def load_curr_item():
         }]
 
     return dict(rows=curr_item)
+
+# **************************** Controllers for item reviews **************************** #
+
+@action('load_reviews')
+@action.uses(db, url_signer.verify())
+def load_reviews():
+    item_reviews = db(db.item_reviews).select().as_list()
+    email = get_user_email()
+    return dict(
+        item_reviews=item_reviews,
+        email=email
+    )
+
+
+@action('add_review', method="POST")
+@action.uses(url_signer.verify(), db)
+def add_review():
+    name=""
+
+    user = db(db.auth_user.email == get_user_email()).select()
+    for r in user:
+        name = r['first_name'] + " " + r['last_name']
+
+    id = db.item_reviews.insert(
+        item_id=request.json.get('item_id'),
+        review_content=request.json.get('review_content'),
+        reviewer_name=name,
+        reviewer_email=get_user_email()
+    )
+    email = get_user_email()
+    return dict(
+        id=id,
+        reviewer_name=name,
+        reviewer_email=email,
+    )
+
+@action('delete_review')
+@action.uses(url_signer.verify(), db)
+def delete_review():
+    id = request.params.get('id')
+    assert id is not None
+    db(db.item_reviews.id == id).delete()
+    return "ok"

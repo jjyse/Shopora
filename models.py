@@ -44,7 +44,7 @@ db.define_table('item',
 db.define_table('item_reviews',
     Field('item_id', 'reference item'),
     Field('review_content'),
-    Field('review_stars'),
+    # Field('review_stars'),
     Field('reviewer_name'),
     Field('reviewer_email')
 )
