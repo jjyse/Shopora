@@ -45,7 +45,7 @@ def index():
     return dict()
 
 @action('collection')
-@action.uses(db, session, auth.user, 'collection.html')
+@action.uses(db, session, auth, 'collection.html')
 def collection():
     return dict(
         load_items_url = URL('load_items', signer=url_signer),
@@ -53,7 +53,7 @@ def collection():
     )
 
 @action('collection-item/<item_id:int>')
-@action.uses(db, session, auth.user, 'collection-item.html')
+@action.uses(db, session, auth, 'collection-item.html')
 def item(item_id=None):
     assert item_id is not None
 
@@ -99,13 +99,13 @@ def wishlist():
     return dict()
 
 @action('cart')
-@action.uses(db, session, auth.user, 'cart.html')
+@action.uses(db, session, auth, 'cart.html')
 def cart():
     print("User:", get_user_email())
     return dict()
 
 @action('support-contact')
-@action.uses(db, session, auth.user, 'supportcontact.html')
+@action.uses(db, session, auth, 'supportcontact.html')
 def supportcontact():
     print("User:", get_user_email())
     return dict()
@@ -126,9 +126,6 @@ def load_items():
                 item_description=x['item_description'],
                 item_price=x['item_price'],
                 item_image=x['item_image'],
-                item_ratings_id=x['item_ratings_id'],
-                item_reviews_id=x['item_reviews_id'],
-                item_versions_id=x['item_versions_id'],
             )
     rows = db(db.item).select().as_list()
     return dict(rows=rows)
@@ -144,15 +141,12 @@ def load_curr_item():
     for row in rows:
         num = row.curr_item_id
 
-    for row in db(db.item.item_ratings_id == num).select():
+    for row in db(db.item.id == num).select():
         curr_item = [{
             "item_name": row.item_name,
             "item_description": row.item_description,
             "item_price": row.item_price,
             "item_image": row.item_image,
-            "item_ratings_id": row.item_ratings_id,
-            "item_reviews_id": row.item_reviews_id,
-            "item_versions_id": row.item_versions_id,
         }]
 
     return dict(rows=curr_item)
