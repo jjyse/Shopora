@@ -39,13 +39,13 @@ import os
 import json
 JSON_FILE = os.path.join(APP_FOLDER, "data", "items.json")
 
-@action('')
-@action.uses(db, auth, 'homepage.html')
-def homepage():
+@action('index')
+@action.uses(db, auth, 'index.html')
+def index():
     return dict()
 
 @action('collection')
-@action.uses(db, auth, 'collection.html')
+@action.uses(db, session, auth.user, 'collection.html')
 def collection():
     return dict(
         load_items_url = URL('load_items', signer=url_signer),
@@ -53,7 +53,7 @@ def collection():
     )
 
 @action('collection-item/<item_id:int>')
-@action.uses(db, auth, 'collection-item.html')
+@action.uses(db, session, auth.user, 'collection-item.html')
 def item(item_id=None):
     assert item_id is not None
 
@@ -75,37 +75,37 @@ def item(item_id=None):
     )
 
 @action('account')
-@action.uses(db, auth, 'account.html')
+@action.uses(db, session, auth.user, 'account.html')
 def account():
     print("User:", get_user_email())
     return dict()
 
 @action('account/edit')
-@action.uses(db, auth, 'editaccount.html')
+@action.uses(db, session, auth.user, 'editaccount.html')
 def editaccount():
     print("User:", get_user_email())
     return dict()
 
 @action('account/favorites')
-@action.uses(db, auth, 'favorites.html')
+@action.uses(db, session, auth.user, 'favorites.html')
 def favorites():
     print("User:", get_user_email())
     return dict()
 
 @action('account/wishlist')
-@action.uses(db, auth, 'wishlist.html')
+@action.uses(db, session, auth.user, 'wishlist.html')
 def wishlist():
     print("User:", get_user_email())
     return dict()
 
 @action('cart')
-@action.uses(db, auth, 'cart.html')
+@action.uses(db, session, auth.user, 'cart.html')
 def cart():
     print("User:", get_user_email())
     return dict()
 
 @action('support-contact')
-@action.uses(db, auth, 'supportcontact.html')
+@action.uses(db, session, auth.user, 'supportcontact.html')
 def supportcontact():
     print("User:", get_user_email())
     return dict()

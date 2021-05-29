@@ -4,12 +4,90 @@
     [v-cloak] {
          display: none;
     }
-</style>
+    .item-container {
+      height: 700px;
+    }
+    .item-box {
+      border: 1px solid rgb(224, 224, 224);
+      height: 100%;
+      width: 50%;
+    }
+    .item-image {
+      height: 40%;
+      width: 40%;
+      float: left;
+    }
+    .item-name {
+      height: 10%;
+      width: 15%;
+      float: left;
+      border: 1px solid rgb(224, 224, 224);
+    }
+    .item-price {
+      position:absolute;
+      bottom: 0;
+      height: 100%;
+      width: 100%;
+    }
+    .item-ratings {
+      height: 100%;
+      width: 30%;
+      float: left;
+      border: 1px solid rgb(224, 224, 224);
+      overflow-y: scroll;
+      overflow-x: hidden;
+    }
+    .item-reviews {
+      height: 100%;
+      width: 30%;
+      float: left;
+      border: 1px solid rgb(224, 224, 224);
+      overflow-y: scroll;
+      overflow-x: hidden;
+    }
+    .pink {
+      background-color: pink
+    }
+    .orange {
+      background-color: rgb(248, 172, 85)
+    }
+    .blue {
+      background-color: rgb(76, 211, 221)
+    }
+    .red {
+      background-color: rgb(190, 89, 106)
+    }
+    .green {
+      background-color: rgb(85, 248, 180)
+    }
+    .purple {
+      background-color: rgb(103, 76, 221)
+    }
+    </style>
 
 <div class="section" id="vue-target" v-cloak>
-    <div class="section">
-        <h1 class="title"></h1>
+  
+    <div class="item-container">
+        <div v-for="row in curr_item">
+            <div class="item-box">
+                <div class="item-image">
+                    <img v-bind:src="row.item_image">
+                </div>
+                <div class="item-name">
+                    {{ row.item_name }} 
+                    <br>
+                    {{ row.item_price }}
+                </div>
+            </div>
+        </div>
+        <div class="item-ratings">
+          Ratings
+        </div>
+        <div class="item-reviews">
+          Reviews
+        </div>
     </div>
+
 </div>
 
 [[block page_scripts]]
