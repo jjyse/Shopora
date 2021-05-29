@@ -38,6 +38,7 @@
       overflow-y: scroll;
       overflow-x: hidden;
     }
+
     .pink {
       background-color: pink
     }
@@ -102,10 +103,43 @@
           Reviews
 
         <!-- ********* Show the list of reviews here ********* -->
-        <div class="notification" v-for="review in reviews.slice().reverse()">
-          <div v-if="review.item_id == curr_item[0].item_id">
+        <div v-for="review in reviews.slice().reverse()">
+          <div class="notification" v-if="review.item_id == curr_item[0].item_id">
               <div>{{review.review_content}}</div>
               <div class="has-text-grey">{{review.reviewer_name}}</div>
+
+              <div class="columns">
+                <div class="column is-1">
+                  <button v-if="review.liked" @mouseenter="set_curr_row(review._idx); get_likers_list(review._idx); set_likes_enabled(true);" @mouseleave="set_likes_enabled(false); reset_lists(); reset_row();" @click="set_liked_mode(review._idx, false); unlike_post(review._idx);">
+                    <i class="fa fa-fw fa-thumbs-up"></i>
+                  </button>
+                  <button v-else @mouseenter="set_curr_row(review._idx); get_likers_list(review._idx); set_likes_enabled(true);" @mouseleave="set_likes_enabled(false); reset_lists(); reset_row();" @click="set_liked_mode(review._idx, true); set_disliked_mode(review._idx, false); like_post(review._idx); undislike_post(review._idx);">
+                    <i class="fa fa-fw fa-thumbs-o-up"></i>
+                  </button>
+                  <button v-if="review.disliked" @mouseenter="set_curr_row(review._idx); get_dislikers_list(review._idx); set_dislikes_enabled(true);" @mouseleave="set_dislikes_enabled(false); reset_lists(); reset_row();" @click="set_disliked_mode(review._idx, false); undislike_post(review._idx);">
+                    <i class="fa fa-fw fa-thumbs-down"></i>
+                  </button>
+                  <button v-else @mouseenter="set_curr_row(review._idx); get_dislikers_list(review._idx); set_dislikes_enabled(true);" @mouseleave="set_dislikes_enabled(false); reset_lists(); reset_row();" @click="set_disliked_mode(review._idx, true); set_liked_mode(review._idx, false); dislike_post(review._idx); unlike_post(review._idx);">
+                    <i class="fa fa-fw fa-thumbs-o-down"></i>
+                  </button>
+                </div>
+                <div class="column is-10">
+                  <div v-if="review._idx == curr_row && likes_enabled && likers_list.length > 0">
+                    <h1 style="color:blue;font-size:12px;">Liked by {{likers_list}}</h1>
+                  </div>
+                  <div v-if="review._idx == curr_row && dislikes_enabled && dislikers_list.length > 0">
+                    <h1 style="color:blue;font-size:12px;">Disliked by {{dislikers_list}}</h1>
+                  </div>
+                </div>
+                <div class="column">
+                  <div v-if="review.add_email == add_email">
+                    <button @click="delete_post(review._idx)" class="button is-danger">
+                      <i class="fa fa-trash"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+
           </div>
         </div>
         <!-- ************************************************* -->
@@ -121,6 +155,14 @@
   let load_reviews_url = "[[=XML(load_reviews_url)]]";
   let add_review_url = "[[=XML(add_review_url)]]";
   let delete_review_url = "[[=XML(delete_review_url)]]";
+
+  let add_liker_url = "[[=XML(add_liker_url)]]";
+  let remove_liker_url = "[[=XML(remove_liker_url)]]";
+  let add_disliker_url = "[[=XML(add_disliker_url)]]";
+  let remove_disliker_url = "[[=XML(remove_disliker_url)]]";
+  let get_likerslist_url = "[[=XML(get_likerslist_url)]]";
+  let get_dislikerslist_url = "[[=XML(get_dislikerslist_url)]]";
+  let get_name_url = "[[=XML(get_name_url)]]";
 </script>
 <script src="js/app.js"></script>
 [[end]]

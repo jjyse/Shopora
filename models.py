@@ -46,15 +46,9 @@ db.define_table('item_reviews',
     Field('review_content'),
     # Field('review_stars'),
     Field('reviewer_name'),
-    Field('reviewer_email')
+    Field('reviewer_email'),
+    Field('likers', type='list:string'), 
+    Field('dislikers', type='list:string'),
 )
-
-db.define_table('review_thumbs',
-    Field('item_reviews_id', 'reference item_reviews'),
-    Field('item_id', 'reference item'),
-    Field('thumbs', 'integer', default=0),
-    Field('thumbs_giver', 'reference auth_user', default=get_user)  
-)
-
 
 db.commit()
