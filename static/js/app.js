@@ -19,12 +19,8 @@ let init = (app) => {
         add_email: "",
 
         // Data related to review writing
-        // add_mode: false,         (review_post_mode)
         likes_enabled: false,
         dislikes_enabled: false,
-        // useremail: "",           (add_email)
-        // post_content: "",        (review_content)
-        // rows: [],                (reviews)
         likers_list: "",
         dislikers_list: "",
         curr_row: 0,
@@ -95,10 +91,6 @@ let init = (app) => {
         app.vue.curr_row = -1;
     };
 
-    // app.set_add_mode = function (new_mode) {
-    //     app.vue.add_mode = new_mode;
-    // };
-
     app.set_curr_row = function (new_mode) {
         app.vue.curr_row = new_mode
     };
@@ -135,61 +127,11 @@ let init = (app) => {
         app.vue.reviews[row_idx].disliked = new_mode;
     };
 
-    /*
-    app.reset_form = function () {
-        app.vue.review_content = "";
-    };
-
-    app.add_post = function () {
-        axios.post(add_post_url,
-            {
-                post_content: app.vue.post_content,
-                name: app.vue.name
-            }).then(function (response) {
-            app.vue.rows.push({
-                id: response.data.id,
-                post_content: app.vue.post_content,
-                user_email: app.vue.useremail,
-                name: app.vue.name,
-                liked: false,
-                disliked: false,
-            });
-            app.enumerate(app.vue.rows);
-            app.reset_form();
-            app.set_add_mode(false);
-        });
-    };
-    
-    app.delete_post = function(row_idx) {
-        let id = app.vue.rows[row_idx].id;
-        axios.get(delete_post_url, {params: {id: id}}).then(function (response) {
-            for (let i = 0; i < app.vue.rows.length; i++) {
-                if (app.vue.rows[i].id === id) {
-                    app.vue.rows.splice(i, 1);
-                    app.enumerate(app.vue.rows);
-                    break;
-                }
-            }
-        });
-    };
-    */
-
     app.get_likers_list = function(row_idx) {
         let id = app.vue.reviews[row_idx].id;
 
         axios.get(get_likerslist_url, {params: {id: id}}).then(function (response) {
             list = response.data.likers_names
-            /*
-            string_list = ""
-            for (let i = 0; i < list.length; i += 1) {
-                if (i != list.length - 1) {
-                    string_list += list[i] + ", ";
-                } else {
-                    string_list += list[i];
-                }
-            }
-            app.vue.likers_list = string_list
-            */
             app.vue.likers_list = list
         });
     };
@@ -198,17 +140,6 @@ let init = (app) => {
         let id = app.vue.reviews[row_idx].id;
         axios.get(get_dislikerslist_url, {params: {id: id}}).then(function (response) {
             list = response.data.dislikers_names
-            /*
-            string_list = ""
-            for (let i = 0; i < list.length; i += 1) {
-                if (i != list.length - 1) {
-                    string_list += list[i] + ", ";
-                } else {
-                    string_list += list[i];
-                }
-            }
-            app.vue.dislikers_list = string_list
-            */
            app.vue.dislikers_list = list
         });
     };

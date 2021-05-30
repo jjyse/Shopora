@@ -32,7 +32,7 @@
     }
     .item-reviews {
       height: 100%;
-      width: 30%;
+      width: 40%;
       float: right;
       border: 1px solid rgb(224, 224, 224);
       overflow-y: scroll;
@@ -132,7 +132,7 @@
                   </div>
                 </div>
                 <div class="column">
-                  <div v-if="review.add_email == add_email">
+                  <div v-if="review.reviewer_email == add_email">
                     <button @click="delete_post(review._idx)" class="button is-danger">
                       <i class="fa fa-trash"></i>
                     </button>
