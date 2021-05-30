@@ -84,6 +84,18 @@
             </button>
           </div>
           <div v-if="review_post_mode">
+            <div>
+              <!-- ********* Set the star rating ********* -->
+              <span @mouseout="stars_out">
+                <span @mouseover="stars_over(star_idx)"
+                      @click="set_stars(star_idx)"
+                      v-for="star_idx in [1, 2, 3, 4, 5]">
+                  <i v-if="star_idx <= current_rating_display" class="fa fa-star"></i>
+                  <i v-if="star_idx > current_rating_display" class="fa fa-star-o"></i>
+                </span>
+              </span>
+            </div>
+            
             <div class="block">
                 <textarea class="textarea" placeholder="Write your review here" v-model="review_content"></textarea>
             </div>
@@ -109,6 +121,7 @@
               <div class="has-text-grey">{{review.reviewer_name}}</div>
 
               <div class="columns">
+
                 <div class="column is-1">
                   <button v-if="review.liked" @mouseenter="set_curr_row(review._idx); get_likers_list(review._idx); set_likes_enabled(true);" @mouseleave="set_likes_enabled(false); reset_lists(); reset_row();" @click="set_liked_mode(review._idx, false); unlike_post(review._idx);">
                     <i class="fa fa-fw fa-thumbs-up"></i>
@@ -123,6 +136,7 @@
                     <i class="fa fa-fw fa-thumbs-o-down"></i>
                   </button>
                 </div>
+
                 <div class="column is-10">
                   <div v-if="review._idx == curr_row && likes_enabled && likers_list.length > 0">
                     <h1 style="color:blue;font-size:12px;">Liked by {{likers_list}}</h1>
@@ -131,6 +145,7 @@
                     <h1 style="color:blue;font-size:12px;">Disliked by {{dislikers_list}}</h1>
                   </div>
                 </div>
+                
                 <div class="column">
                   <div v-if="review.reviewer_email == add_email">
                     <button @click="delete_post(review._idx)" class="button is-danger">
@@ -138,6 +153,7 @@
                     </button>
                   </div>
                 </div>
+
               </div>
 
           </div>
@@ -156,6 +172,7 @@
   let add_review_url = "[[=XML(add_review_url)]]";
   let delete_review_url = "[[=XML(delete_review_url)]]";
 
+  let get_rating_url = "[[=XML(get_rating_url)]]";
   let add_liker_url = "[[=XML(add_liker_url)]]";
   let remove_liker_url = "[[=XML(remove_liker_url)]]";
   let add_disliker_url = "[[=XML(add_disliker_url)]]";

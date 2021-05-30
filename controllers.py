@@ -54,6 +54,7 @@ def collection():
         add_review_url = URL('add_review', signer=url_signer),
         delete_review_url = URL('delete_review', signer=url_signer),
 
+        get_rating_url = URL('get_rating', signer=url_signer),
         get_name_url = URL('get_name', signer=url_signer),
         add_liker_url = URL('add_liker', signer=url_signer),
         remove_liker_url = URL('remove_liker', signer=url_signer),
@@ -87,6 +88,7 @@ def item(item_id=None):
         add_review_url = URL('add_review', signer=url_signer),
         delete_review_url = URL('delete_review', signer=url_signer),
 
+        get_rating_url = URL('get_rating', signer=url_signer),
         get_name_url = URL('get_name', signer=url_signer),
         add_liker_url = URL('add_liker', signer=url_signer),
         remove_liker_url = URL('remove_liker', signer=url_signer),
@@ -191,7 +193,6 @@ def load_reviews():
 @action.uses(url_signer.verify(), db)
 def add_review():
     name=""
-
     user = db(db.auth_user.email == get_user_email()).select()
     for r in user:
         name = r['first_name'] + " " + r['last_name']
@@ -200,6 +201,7 @@ def add_review():
         item_id=request.json.get('item_id'),
         review_content=request.json.get('review_content'),\
         reviewer=get_user(),
+        rating=request.json.get('rating'),
     )
     email = get_user_email()
     return dict(
@@ -216,6 +218,14 @@ def delete_review():
     db(db.item_reviews.id == id).delete()
     return "ok"
 
+@action('get_rating')
+@action.uses(url_signer.verify(), db)
+def get_rating():
+    item_id = request.params.get('item_id')
+    row = db((db.item_reviews.item_id == item_id) &
+             (db.item_reviews.reviewer == get_user())).select().first()
+    rating = row.rating if row is not None else 0
+    return dict(rating=rating)
 
 # ********************** Controllers for adding likes/dislikes to reviews *********************** #
 

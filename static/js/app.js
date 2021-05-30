@@ -17,8 +17,10 @@ let init = (app) => {
         review_content: "",
         reviews: [],
         add_email: "",
+        current_rating_display: 0,
+        num_stars: 0,
 
-        // Data related to review writing
+        // Data related to likes/dislikes
         likes_enabled: false,
         dislikes_enabled: false,
         likers_list: "",
@@ -37,6 +39,7 @@ let init = (app) => {
             {
                 item_id: app.vue.curr_item[0].item_id,
                 review_content: app.vue.review_content,
+                rating: app.vue.num_stars,
             })
             .then(function (response){
                 app.vue.reviews.push({
@@ -45,6 +48,8 @@ let init = (app) => {
                     review_content: app.vue.review_content,
                     reviewer_name: response.data.reviewer_name,
                     reviewer_email: response.data.reviewer_email,
+                    num_stars_display: app.vue.num_stars,
+                    rating: app.vue.num_stars,
                     liked: false,
                     disliked: false,
                 });
@@ -54,8 +59,26 @@ let init = (app) => {
             });
     };
 
+    app.set_stars = (num_stars) => {
+        app.vue.num_stars = num_stars;
+    };
+
+    app.stars_out = function (){
+        // let review = app.vue.reviews[review_idx];
+        // review.num_stars_display = review.rating;
+        app.vue.current_rating_display = app.vue.num_stars;
+    };
+
+    app.stars_over = (num_stars) => {
+        // let review = app.vue.reviews[review_idx];
+        // review.num_stars_display = num_stars;
+        app.vue.current_rating_display = num_stars;
+    };
+
     app.reset_review = function (){
         app.vue.review_content = "";
+        app.vue.num_stars = 0,
+        app.vue.current_rating_display = 0;
     };
 
     app.del_review = (review_idx) => {
@@ -153,6 +176,10 @@ let init = (app) => {
         reset_review: app.reset_review,
         del_review: app.del_review,
 
+        set_stars: app.set_stars,
+        stars_out: app.stars_out,
+        stars_over: app.stars_over,
+
         like_post: app.like_post,
         unlike_post: app.unlike_post,
         dislike_post: app.dislike_post,
@@ -212,8 +239,12 @@ let init = (app) => {
                             }
                         }
                     }
+                    axios.get(get_rating_url, {params: {"item_id": rows[i].item_id}})
+                        .then((result) => {
+                            rows[i].rating = result.data.rating;
+                            rows[i].num_stars_display = result.data.rating;
+                        });
                 }
-                // app.vue.rows = app.enumerate(response.data.rows);
                 app.vue.reviews = app.enumerate(rows)
             });
         // ************ Retrieving likers/dislikers from database ***********
