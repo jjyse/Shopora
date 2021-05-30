@@ -27,8 +27,7 @@ db.define_table('storage',
 )
 
 db.define_table('user_info',
-    Field('user_name', requires=IS_NOT_EMPTY(), ondelete="SET NULL"),
-    Field('user_email', requires=IS_NOT_EMPTY(), ondelete="SET NULL"),
+    Field('user', 'reference auth_user', default=get_user), # User doing the rating.
     Field('user_favorites'),
     Field('user_wishlist'),
     Field('user_lists'),
@@ -45,9 +44,7 @@ db.define_table('item_reviews',
     Field('item_id', 'reference item'),
     Field('review_content'),
     Field('rating', 'integer', default=0),
-    # Field('rater', 'reference auth_user', default=get_user) # User doing the rating.
-    Field('reviewer_name'),
-    Field('reviewer_email'),
+    Field('reviewer', 'reference auth_user', default=get_user), # User doing the rating.
     Field('likers', type='list:string'), 
     Field('dislikers', type='list:string'),
 )

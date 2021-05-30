@@ -198,9 +198,8 @@ def add_review():
 
     id = db.item_reviews.insert(
         item_id=request.json.get('item_id'),
-        review_content=request.json.get('review_content'),
-        reviewer_name=name,
-        reviewer_email=get_user_email()
+        review_content=request.json.get('review_content'),\
+        reviewer=get_user(),
     )
     email = get_user_email()
     return dict(
