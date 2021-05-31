@@ -20,6 +20,7 @@ let init = (app) => {
         current_rating_display: 0,
         num_stars: 0,
         image: null,
+        review_images: [],
 
         // Data related to likes/dislikes
         likes_enabled: false,
@@ -35,7 +36,7 @@ let init = (app) => {
         if (new_status == false) {
             app.vue.current_rating_display = 0;
             app.vue.num_stars = 0;
-            app.vue.image = 0;
+            app.vue.image = null;
         }
         app.vue.review_post_mode = new_status;
     };
@@ -59,11 +60,17 @@ let init = (app) => {
                     liked: false,
                     disliked: false,
                 });
-                axios.post(upload_url,
-                    {
-                        review_id: response.data.id,
+                if (app.vue.image != null) {
+                    axios.post(upload_url,
+                        {
+                            review_id: response.data.id,
+                            image: app.vue.image,
+                        });
+                    app.vue.review_images.push({
+                        id: response.data.id,
                         image: app.vue.image,
                     });
+                }
                 app.enumerate(app.vue.reviews);
                 app.reset_review();
                 app.set_mode(false);
@@ -106,6 +113,7 @@ let init = (app) => {
             for (let i=0; i<app.vue.reviews.length; i++){
                 if(app.vue.reviews[i],id == id){
                     app.vue.reviews.reverse().splice(i, 1);
+                    app.vue.review_images.splice(i, 1);
                     app.enumerate(app.vue.reviews);
                     break;
                 }
@@ -272,7 +280,10 @@ let init = (app) => {
         axios.get(get_name_url).then(function (response) {
             app.vue.name = response.data.name;
         });
-
+        // ************ Retrieving review images from database ***********
+        axios.get(get_images_url).then(function (response) {
+            app.vue.review_images = response.data.rows;
+        });
 
     };
 

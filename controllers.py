@@ -55,6 +55,7 @@ def collection():
         delete_review_url = URL('delete_review', signer=url_signer),
 
         upload_url = URL('upload_image', signer=url_signer),
+        get_images_url = URL('get_images', signer=url_signer),
 
         get_rating_url = URL('get_rating', signer=url_signer),
         get_name_url = URL('get_name', signer=url_signer),
@@ -91,6 +92,7 @@ def item(item_id=None):
         delete_review_url = URL('delete_review', signer=url_signer),
 
         upload_url = URL('upload_image', signer=url_signer),
+        get_images_url = URL('get_images', signer=url_signer),
 
         get_rating_url = URL('get_rating', signer=url_signer),
         get_name_url = URL('get_name', signer=url_signer),
@@ -222,6 +224,7 @@ def delete_review():
     id = request.params.get('id')
     assert id is not None
     db(db.item_reviews.id == id).delete()
+    db(db.review_photos.item_reviews_id == id).delete()
     return "ok"
 
 @action('get_rating')
@@ -241,14 +244,11 @@ def upload_image():
     db.review_photos.insert(image=image, item_reviews_id=review_id)
     return "ok"
 
-@action('get_review_imgs')
+@action('get_images')
 @action.uses(url_signer.verify(), db)
-def get_review_imgs():
-    item_id = request.params.get('item_id')
-    row = db((db.item_reviews.item_id == item_id) &
-             (db.item_reviews.reviewer == get_user())).select().first()
-    rating = row.rating if row is not None else 0
-    return dict(rating=rating)
+def get_images():
+    rows = db(db.review_photos).select().as_list()
+    return dict(rows=rows)
 
 # ********************** Controllers for adding likes/dislikes to reviews *********************** #
 
