@@ -31,6 +31,7 @@ db.define_table('user_info',
     Field('user_favorites'),
     Field('user_wishlist'),
     Field('user_lists'),
+    Field('user_cart'),
 )
 
 db.define_table('item',
@@ -45,8 +46,15 @@ db.define_table('item_reviews',
     Field('review_content'),
     Field('rating', 'integer', default=0),
     Field('reviewer', 'reference auth_user', default=get_user), # User doing the rating.
+    Field('reviewer_email', default=get_user_email),
+    Field('reviewer_name', requires=IS_NOT_EMPTY()),
     Field('likers', type='list:string'), 
     Field('dislikers', type='list:string'),
+)
+
+db.define_table('review_photos',
+    Field('item_reviews_id', 'reference item_reviews'),
+    Field('image'),
 )
 
 db.commit()

@@ -19,6 +19,7 @@ let init = (app) => {
         add_email: "",
         current_rating_display: 0,
         num_stars: 0,
+        image: null,
 
         // Data related to likes/dislikes
         likes_enabled: false,
@@ -31,6 +32,11 @@ let init = (app) => {
 
     // *********************** Review writing methods *******************************
     app.set_mode = function(new_status){
+        if (new_status == false) {
+            app.vue.current_rating_display = 0;
+            app.vue.num_stars = 0;
+            app.vue.image = 0;
+        }
         app.vue.review_post_mode = new_status;
     };
 
@@ -53,6 +59,11 @@ let init = (app) => {
                     liked: false,
                     disliked: false,
                 });
+                axios.post(upload_url,
+                    {
+                        review_id: response.data.id,
+                        image: app.vue.image,
+                    });
                 app.enumerate(app.vue.reviews);
                 app.reset_review();
                 app.set_mode(false);
@@ -64,26 +75,34 @@ let init = (app) => {
     };
 
     app.stars_out = function (){
-        // let review = app.vue.reviews[review_idx];
-        // review.num_stars_display = review.rating;
         app.vue.current_rating_display = app.vue.num_stars;
     };
 
     app.stars_over = (num_stars) => {
-        // let review = app.vue.reviews[review_idx];
-        // review.num_stars_display = num_stars;
         app.vue.current_rating_display = num_stars;
+    };
+
+    app.upload_file = function (event) {
+        let input = event.target;
+        let file = input.files[0];
+        if (file) {
+            let reader = new FileReader();
+            reader.addEventListener("load", function () {
+                app.vue.image = reader.result;
+            });
+            reader.readAsDataURL(file);
+        }
     };
 
     app.reset_review = function (){
         app.vue.review_content = "";
-        app.vue.num_stars = 0,
+        app.vue.num_stars = 0;
         app.vue.current_rating_display = 0;
     };
 
-    app.del_review = (review_idx) => {
+    app.delete_review = (review_idx) => {
         let id = app.vue.reviews[review_idx].id;
-        axios.get(del_review_url, {params: {id: id}}).then(function ( response){
+        axios.get(delete_review_url, {params: {id: id}}).then(function ( response){
             for (let i=0; i<app.vue.reviews.length; i++){
                 if(app.vue.reviews[i],id == id){
                     app.vue.reviews.reverse().splice(i, 1);
@@ -91,7 +110,7 @@ let init = (app) => {
                     break;
                 }
             }
-        })
+        });
     }
 
     app.enumerate = (a) => {
@@ -163,7 +182,7 @@ let init = (app) => {
         let id = app.vue.reviews[row_idx].id;
         axios.get(get_dislikerslist_url, {params: {id: id}}).then(function (response) {
             list = response.data.dislikers_names
-           app.vue.dislikers_list = list
+            app.vue.dislikers_list = list
         });
     };
 
@@ -174,7 +193,9 @@ let init = (app) => {
         set_mode: app.set_mode,
         add_review: app.add_review,
         reset_review: app.reset_review,
-        del_review: app.del_review,
+        delete_review: app.delete_review,
+
+        upload_file: app.upload_file,
 
         set_stars: app.set_stars,
         stars_out: app.stars_out,

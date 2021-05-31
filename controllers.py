@@ -54,6 +54,8 @@ def collection():
         add_review_url = URL('add_review', signer=url_signer),
         delete_review_url = URL('delete_review', signer=url_signer),
 
+        upload_url = URL('upload_image', signer=url_signer),
+
         get_rating_url = URL('get_rating', signer=url_signer),
         get_name_url = URL('get_name', signer=url_signer),
         add_liker_url = URL('add_liker', signer=url_signer),
@@ -87,6 +89,8 @@ def item(item_id=None):
         load_reviews_url = URL('load_reviews', signer=url_signer),
         add_review_url = URL('add_review', signer=url_signer),
         delete_review_url = URL('delete_review', signer=url_signer),
+
+        upload_url = URL('upload_image', signer=url_signer),
 
         get_rating_url = URL('get_rating', signer=url_signer),
         get_name_url = URL('get_name', signer=url_signer),
@@ -201,6 +205,8 @@ def add_review():
         item_id=request.json.get('item_id'),
         review_content=request.json.get('review_content'),\
         reviewer=get_user(),
+        reviewer_name=name,
+        reviewer_email=get_user_email(),
         rating=request.json.get('rating'),
     )
     email = get_user_email()
@@ -221,6 +227,23 @@ def delete_review():
 @action('get_rating')
 @action.uses(url_signer.verify(), db)
 def get_rating():
+    item_id = request.params.get('item_id')
+    row = db((db.item_reviews.item_id == item_id) &
+             (db.item_reviews.reviewer == get_user())).select().first()
+    rating = row.rating if row is not None else 0
+    return dict(rating=rating)
+
+@action('upload_image', method="POST")
+@action.uses(url_signer.verify(), db)
+def upload_image():
+    review_id = request.json.get("review_id")
+    image = request.json.get("image")
+    db.review_photos.insert(image=image, item_reviews_id=review_id)
+    return "ok"
+
+@action('get_review_imgs')
+@action.uses(url_signer.verify(), db)
+def get_review_imgs():
     item_id = request.params.get('item_id')
     row = db((db.item_reviews.item_id == item_id) &
              (db.item_reviews.reviewer == get_user())).select().first()

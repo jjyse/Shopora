@@ -99,6 +99,21 @@
             <div class="block">
                 <textarea class="textarea" placeholder="Write your review here" v-model="review_content"></textarea>
             </div>
+
+            <div class="block is-tight">
+              <div class="file is-info">
+                <label class="file-label">
+                  <input class="file-input" type="file"
+                         accept=".jpg, .png, .jpeg, .gif, .bmp, .tif, .tiff|image/*"
+                         @change="upload_file($event)">
+                  <span class="file-cta">
+                    <span class="file-label">
+                      <span><i class="fa fa-upload"></i></span>
+                    </span>
+                  </span>
+                </label>
+              </div>
+            </div>
     
             <div class="block">
                 <a class="button is-primary" @click="add_review">
@@ -148,7 +163,7 @@
                 
                 <div class="column">
                   <div v-if="review.reviewer_email == add_email">
-                    <button @click="delete_post(review._idx)" class="button is-danger">
+                    <button @click="delete_review(review._idx)" class="button is-danger">
                       <i class="fa fa-trash"></i>
                     </button>
                   </div>
@@ -171,6 +186,8 @@
   let load_reviews_url = "[[=XML(load_reviews_url)]]";
   let add_review_url = "[[=XML(add_review_url)]]";
   let delete_review_url = "[[=XML(delete_review_url)]]";
+
+  let upload_url = "[[=XML(upload_url)]]";
 
   let get_rating_url = "[[=XML(get_rating_url)]]";
   let add_liker_url = "[[=XML(add_liker_url)]]";
