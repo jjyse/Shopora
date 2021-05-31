@@ -12,6 +12,10 @@ let init = (app) => {
         items: [],
         curr_item: [],
 
+        // Data related to lists
+        lists: [],
+        create_new_list_mode: false,
+
         // Data related to review writing
         review_post_mode: false,
         review_content: "",
@@ -194,6 +198,44 @@ let init = (app) => {
         });
     };
 
+    // *************************** User list methods *************************************
+
+    app.set_create_new_list_mode = function(new_status){
+        if (new_status == false) {
+        }
+        app.vue.create_new_list_mode = new_status;
+    };
+
+    app.create_list = function(list_name, item_id){
+        let x = 0;
+        if (list_name == null) {
+            x = 1;
+        }
+        for (let i = 0; i < app.vue.lists.length; i++) {
+            if(app.vue.lists[i].list_name == list_name) {
+                x = 1;
+            }
+        }
+        if (x = 0) {
+            axios.post(create_user_list_url,
+                {
+                    list_name: list_name,
+                    item_id: item_id,
+                })
+                .then(function (response){
+                    app.vue.lists.push({
+                        user_email: app.vue.add_email,
+                        list_id: response.data.id,
+                        list_name: list_name,
+                        item_id: item_id,
+                    });
+                    app.enumerate(app.vue.lists);
+                    // app.reset_list_name();
+                    // app.set_list_mode(false);
+                });
+        }
+    };
+
     // ***********************************************************************************
 
     app.methods = {
@@ -204,6 +246,8 @@ let init = (app) => {
         delete_review: app.delete_review,
 
         upload_file: app.upload_file,
+        create_list: app.create_list,
+        set_create_new_list_mode: app.set_create_new_list_mode,
 
         set_stars: app.set_stars,
         stars_out: app.stars_out,
@@ -235,7 +279,9 @@ let init = (app) => {
     app.init = () => {
 
         // *************** Retrieving items from database ****************
-
+        axios.get(load_user_lists_url).then(function (response) {
+            app.vue.lists = response.data.rows;
+        });
         axios.get(load_items_url).then(function (response) {
             app.vue.items = response.data.rows;
         });

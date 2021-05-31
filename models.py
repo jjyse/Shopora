@@ -26,14 +26,6 @@ db.define_table('storage',
     Field('curr_item_id'),
 )
 
-db.define_table('user_info',
-    Field('user', 'reference auth_user', default=get_user), # User doing the rating.
-    Field('user_favorites'),
-    Field('user_wishlist'),
-    Field('user_lists'),
-    Field('user_cart'),
-)
-
 db.define_table('item',
     Field('item_name', requires=IS_NOT_EMPTY()),
     Field('item_description'),
@@ -55,6 +47,13 @@ db.define_table('item_reviews',
 db.define_table('review_photos',
     Field('item_reviews_id', 'reference item_reviews'),
     Field('image'),
+)
+
+db.define_table('list',
+    Field('user', 'reference auth_user', default=get_user), # User doing the rating.
+    Field('user_email', default=get_user_email),
+    Field('list_name'),
+    Field('item_id', 'reference item'),
 )
 
 db.commit()

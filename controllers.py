@@ -56,6 +56,8 @@ def collection():
 
         upload_url = URL('upload_image', signer=url_signer),
         get_images_url = URL('get_images', signer=url_signer),
+        load_user_lists_url = URL('load_user_lists', signer=url_signer),
+        create_user_list_url = URL('create_user_list', signer=url_signer),
 
         get_rating_url = URL('get_rating', signer=url_signer),
         get_name_url = URL('get_name', signer=url_signer),
@@ -93,6 +95,8 @@ def item(item_id=None):
 
         upload_url = URL('upload_image', signer=url_signer),
         get_images_url = URL('get_images', signer=url_signer),
+        load_user_lists_url = URL('load_user_lists', signer=url_signer),
+        create_user_list_url = URL('create_user_list', signer=url_signer),
 
         get_rating_url = URL('get_rating', signer=url_signer),
         get_name_url = URL('get_name', signer=url_signer),
@@ -205,7 +209,7 @@ def add_review():
 
     id = db.item_reviews.insert(
         item_id=request.json.get('item_id'),
-        review_content=request.json.get('review_content'),\
+        review_content=request.json.get('review_content'),
         reviewer=get_user(),
         reviewer_name=name,
         reviewer_email=get_user_email(),
@@ -353,3 +357,35 @@ def remove_disliker():
     if new_dislikers is not None and useremail in new_dislikers:
         new_dislikers.remove(useremail)
     db(db.item_reviews.id == id).update(dislikers=new_dislikers)
+
+# ********************** Controllers for user lists *********************** #
+
+@action('load_user_lists')
+@action.uses(db, url_signer.verify())
+def load_user_lists():
+    rows = []
+    
+    for list_item in db(db.list.user == get_user).select():
+        rows.append({
+            "user_email": list_item.user_email,
+            "list_id": list_item.id,
+            "list_name": list_item.list_name,
+            "item_id": list_item.item_id,
+        })
+
+    return dict(
+        rows=rows,
+    )
+
+@action('create_user_list', method="POST")
+@action.uses(db, url_signer.verify())
+def create_user_list():
+    id = db.list.insert(
+        user=get_user,
+        user_email=get_user_email(),
+        list_name=request.json.get('list_name'),
+        item_id=request.json.get('item_id'),
+    )
+    return dict(
+        id=id,
+    )

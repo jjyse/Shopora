@@ -126,10 +126,27 @@
         </div>
 
         </div>
-        <div class="item-reviews">
-          Reviews
+
+        <!-- ************************** User Lists ******************************* -->
+        <div v-if="create_new_list_mode == false">
+          <button class="button is-primary" @click="set_create_new_list_mode(true)">
+              Add to New List
+          </button>
+        </div>
+        <div v-if="create_new_list_mode">
+          <div class="block">
+            <a class="button is-primary" @click="create_list(list_name, curr_item[0].item_id)">
+              Submit
+            </a>
+            <a class="button is-warning" @click="set_create_new_list_mode(false)">
+              Cancel
+            </a>
+        </div>
+        </div>
 
         <!-- ********* Show the list of reviews here ********* -->
+        <div class="item-reviews">
+          Reviews
         <div v-for="review in reviews.slice().reverse()">
           <div class="notification" v-if="review.item_id == curr_item[0].item_id">
               <div>{{review.review_content}}</div>
@@ -189,6 +206,8 @@
 
   let upload_url = "[[=XML(upload_url)]]";
   let get_images_url = "[[=XML(get_images_url)]]";
+  let load_user_lists_url = "[[=XML(load_user_lists_url)]]";
+  let create_user_list_url = "[[=XML(create_user_list_url)]]";
 
   let get_rating_url = "[[=XML(get_rating_url)]]";
   let add_liker_url = "[[=XML(add_liker_url)]]";
