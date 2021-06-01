@@ -123,9 +123,7 @@
                     Cancel
                 </a>
             </div>
-        </div>
-
-        </div>
+          </div>
 
         <!-- ************************** User Lists ******************************* -->
         <div v-if="create_new_list_mode == false">
@@ -134,14 +132,27 @@
           </button>
         </div>
         <div v-if="create_new_list_mode">
+
           <div class="block">
-            <a class="button is-primary" @click="create_list(list_name, curr_item[0].item_id)">
+            <textarea class="input" placeholder="Enter a new list name here" v-model="new_list_name"></textarea>
+          </div>
+
+          <div class="block">
+
+
+            <div v-for="ln in list_names">
+              <button @click="create_list(ln)"> {{ ln }} </button>
+            </div>
+
+            <a class="button is-primary" @click="create_list(new_list_name)">
               Submit
             </a>
             <a class="button is-warning" @click="set_create_new_list_mode(false)">
               Cancel
             </a>
+          </div>
         </div>
+
         </div>
 
         <!-- ********* Show the list of reviews here ********* -->

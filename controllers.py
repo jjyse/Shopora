@@ -368,7 +368,6 @@ def load_user_lists():
     for list_item in db(db.list.user == get_user).select():
         rows.append({
             "user_email": list_item.user_email,
-            "list_id": list_item.id,
             "list_name": list_item.list_name,
             "item_id": list_item.item_id,
         })

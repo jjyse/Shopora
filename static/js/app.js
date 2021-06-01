@@ -14,7 +14,9 @@ let init = (app) => {
 
         // Data related to lists
         lists: [],
+        list_names: [],
         create_new_list_mode: false,
+        new_list_name: "",
 
         // Data related to review writing
         review_post_mode: false,
@@ -200,40 +202,55 @@ let init = (app) => {
 
     // *************************** User list methods *************************************
 
+    app.reset_list = function (){
+        app.vue.new_list_name = "";
+    };
+
     app.set_create_new_list_mode = function(new_status){
-        if (new_status == false) {
+        if (new_status == true) {
+            app.vue.list_names = app.get_list_names(app.vue.lists);
         }
         app.vue.create_new_list_mode = new_status;
     };
 
-    app.create_list = function(list_name, item_id){
-        let x = 0;
-        if (list_name == null) {
-            x = 1;
-        }
-        for (let i = 0; i < app.vue.lists.length; i++) {
-            if(app.vue.lists[i].list_name == list_name) {
-                x = 1;
-            }
-        }
-        if (x = 0) {
+    app.create_list = function(list_name){
+
+        if (list_name != "") {
+
             axios.post(create_user_list_url,
                 {
                     list_name: list_name,
-                    item_id: item_id,
+                    item_id: app.vue.curr_item[0].item_id,
                 })
                 .then(function (response){
+                    // Not reactive for some reason
+                    /*
                     app.vue.lists.push({
                         user_email: app.vue.add_email,
                         list_id: response.data.id,
                         list_name: list_name,
-                        item_id: item_id,
+                        item_id: app.vue.curr_item[0].item_id,
                     });
-                    app.enumerate(app.vue.lists);
-                    // app.reset_list_name();
-                    // app.set_list_mode(false);
+                    */
                 });
+            app.vue.lists.push({
+                user_email: app.vue.add_email,
+                list_name: list_name,
+                item_id: app.vue.curr_item[0].item_id,
+            });
+            // app.enumerate(lists);
+
         }
+        app.set_create_new_list_mode(false);
+        app.reset_list();
+    };
+
+    app.get_list_names = function(arr) {
+        let list_names = [];
+        for (let i = 0; i < arr.length; i++) {
+            list_names.push(arr[i].list_name)
+        }
+        return [...new Set(list_names)];
     };
 
     // ***********************************************************************************
@@ -248,6 +265,8 @@ let init = (app) => {
         upload_file: app.upload_file,
         create_list: app.create_list,
         set_create_new_list_mode: app.set_create_new_list_mode,
+        reset_list: app.reset_list,
+        get_list_names: app.get_list_names,
 
         set_stars: app.set_stars,
         stars_out: app.stars_out,
