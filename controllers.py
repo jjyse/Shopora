@@ -236,7 +236,8 @@ def delete_review():
 def get_rating():
     review_id = request.params.get('review_id')
     row = db(db.item_reviews.id == review_id).select()
-    rating = row.rating if row is not None else 0
+    for r in row:
+        rating = r.rating if r is not None else 0
     return dict(rating=rating)
 
 @action('upload_image', method="POST")
