@@ -63,10 +63,7 @@ def collection():
         get_name_url = URL('get_name', signer=url_signer),
         add_liker_url = URL('add_liker', signer=url_signer),
         remove_liker_url = URL('remove_liker', signer=url_signer),
-        add_disliker_url = URL('add_disliker', signer=url_signer),
-        remove_disliker_url = URL('remove_disliker', signer=url_signer),
         get_likerslist_url = URL('get_likerslist', signer=url_signer),
-        get_dislikerslist_url = URL('get_dislikerslist', signer=url_signer),
     )
 
 @action('collection-item/<item_id:int>')
@@ -102,10 +99,7 @@ def item(item_id=None):
         get_name_url = URL('get_name', signer=url_signer),
         add_liker_url = URL('add_liker', signer=url_signer),
         remove_liker_url = URL('remove_liker', signer=url_signer),
-        add_disliker_url = URL('add_disliker', signer=url_signer),
-        remove_disliker_url = URL('remove_disliker', signer=url_signer),
         get_likerslist_url = URL('get_likerslist', signer=url_signer),
-        get_dislikerslist_url = URL('get_dislikerslist', signer=url_signer),
     )
 
 @action('account')
@@ -282,26 +276,6 @@ def get_likerslist():
     # print(likers_names)
     return dict(likers_names=likers_names)
 
-@action('get_dislikerslist')
-@action.uses(url_signer.verify(), db)
-def get_dislikerslist():
-    id = request.params.get('id')
-    assert id is not None
-    row = db(db.item_reviews.id == id).select().as_list()
-    dislikerslist = row[0]["dislikers"]
-    # print(dislikerslist)
-    dislikers_names = ""
-    if dislikerslist is not None:
-        length = len(dislikerslist)
-        for i in range(0, length):
-            r = db(db.auth_user.email == dislikerslist[i]).select().first()
-            name = r.first_name + " " + r.last_name if r is not None else "Unknown"
-            dislikers_names += name
-            if i != length - 1:
-                dislikers_names += ", "
-    # print(likers_names)
-    return dict(dislikers_names=dislikers_names)
-
 @action('add_liker')
 @action.uses(url_signer.verify(), db)
 def add_liker():
@@ -329,34 +303,6 @@ def remove_liker():
     if new_likers is not None and useremail in new_likers:
         new_likers.remove(useremail)
     db(db.item_reviews.id == id).update(likers=new_likers)
-
-@action('add_disliker')
-@action.uses(url_signer.verify(), db)
-def add_disliker():
-    id = request.params.get('id')
-    assert id is not None
-    useremail = get_user_email()
-    dislikers = db(db.item_reviews.id == id).select().as_list()
-    # print(dislikers)
-    new_dislikers = dislikers[0]["dislikers"]
-    if new_dislikers is None:
-        new_dislikers = []
-    if useremail not in new_dislikers:
-        new_dislikers.append(useremail)
-    db(db.item_reviews.id == id).update(dislikers=new_dislikers)
-
-@action('remove_disliker')
-@action.uses(url_signer.verify(), db)
-def remove_disliker():
-    id = request.params.get('id')
-    assert id is not None
-    useremail = get_user_email()
-    dislikers = db(db.item_reviews.id == id).select().as_list()
-    # print(likers)
-    new_dislikers = dislikers[0]["dislikers"]
-    if new_dislikers is not None and useremail in new_dislikers:
-        new_dislikers.remove(useremail)
-    db(db.item_reviews.id == id).update(dislikers=new_dislikers)
 
 # ********************** Controllers for user lists *********************** #
 

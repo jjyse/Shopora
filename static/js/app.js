@@ -30,11 +30,9 @@ let init = (app) => {
         review_images: [],
         show_reviews: false,
 
-        // Data related to likes/dislikes
+        // Data related to likes
         likes_enabled: false,
-        dislikes_enabled: false,
         likers_list: "",
-        dislikers_list: "",
         curr_row: 0,
         name: "",
     };
@@ -66,7 +64,6 @@ let init = (app) => {
                     num_stars_display: app.vue.num_stars,
                     rating: app.vue.num_stars,
                     liked: false,
-                    disliked: false,
                 });
                 if (app.vue.image != null) {
                     axios.post(upload_url,
@@ -130,6 +127,9 @@ let init = (app) => {
     }
 
     app.show_review_writing_mode = function(new_status){
+        if (new_status == false) {
+            app.vue.current_rating_display = 0;
+        }
         app.vue.review_writing_mode = new_status;
     };
 
@@ -142,11 +142,10 @@ let init = (app) => {
         return a;
     };
 
-    // *************************** Likers/dislikers methods ******************************
+    // *************************** Liker methods ******************************
 
     app.reset_lists = function () {
         likers_list = "";
-        dislikers_list = "";
     };
 
     app.reset_row = function () {
@@ -161,10 +160,6 @@ let init = (app) => {
         app.vue.likes_enabled = new_mode;
     };
 
-    app.set_dislikes_enabled = function (new_mode) {
-        app.vue.dislikes_enabled = new_mode;
-    };
-
     app.like_post = function (row_idx) {
         let id = app.vue.reviews[row_idx].id;
         axios.get(add_liker_url, {params: {id: id, name: app.vue.name}}).then(function (response) {});
@@ -177,32 +172,12 @@ let init = (app) => {
         app.vue.reviews[row_idx].liked = new_mode;
     };
 
-    app.dislike_post = function (row_idx) {
-        let id = app.vue.reviews[row_idx].id;
-        axios.get(add_disliker_url, {params: {id: id, name: app.vue.name}}).then(function (response) {});
-    };
-    app.undislike_post = function (row_idx) {
-        let id = app.vue.reviews[row_idx].id;
-        axios.get(remove_disliker_url, {params: {id: id, name: app.vue.name}}).then(function (response) {});
-    };
-    app.set_disliked_mode = function (row_idx, new_mode) {
-        app.vue.reviews[row_idx].disliked = new_mode;
-    };
-
     app.get_likers_list = function(row_idx) {
         let id = app.vue.reviews[row_idx].id;
 
         axios.get(get_likerslist_url, {params: {id: id}}).then(function (response) {
             list = response.data.likers_names
             app.vue.likers_list = list
-        });
-    };
-
-    app.get_dislikers_list = function(row_idx) {
-        let id = app.vue.reviews[row_idx].id;
-        axios.get(get_dislikerslist_url, {params: {id: id}}).then(function (response) {
-            list = response.data.dislikers_names
-            app.vue.dislikers_list = list
         });
     };
 
@@ -286,15 +261,10 @@ let init = (app) => {
 
         like_post: app.like_post,
         unlike_post: app.unlike_post,
-        dislike_post: app.dislike_post,
-        undislike_post: app.undislike_post,
         set_curr_row: app.set_curr_row,
         set_liked_mode: app.set_liked_mode,
-        set_disliked_mode: app.set_disliked_mode,
         get_likers_list: app.get_likers_list,
-        get_dislikers_list: app.get_dislikers_list,
         set_likes_enabled: app.set_likes_enabled,
-        set_dislikes_enabled: app.set_dislikes_enabled,
         reset_row: app.reset_row,
         reset_lists: app.reset_lists,
 
@@ -328,19 +298,10 @@ let init = (app) => {
 
                 for (let i = 0; i < rows.length; i++) {
                     rows[i].liked = false
-                    rows[i].disliked = false
                     if (rows[i].likers != null) {
                         for (let j = 0; j < rows[i].likers.length; j++) {
                             if (rows[i].likers[j] == app.vue.add_email) {
                                 rows[i].liked = true;
-                                break;
-                            }
-                        }
-                    }
-                    if (rows[i].dislikers != null) {
-                        for (let j = 0; j < rows[i].dislikers.length; j++) {
-                            if (rows[i].dislikers[j] == app.vue.add_email) {
-                                rows[i].disliked = true;
                                 break;
                             }
                         }
@@ -353,7 +314,7 @@ let init = (app) => {
                 }
                 app.vue.reviews = app.enumerate(rows)
             });
-        // ************ Retrieving likers/dislikers from database ***********
+        // ************ Retrieving likers from database ***********
         axios.get(get_name_url).then(function (response) {
             app.vue.name = response.data.name;
         });

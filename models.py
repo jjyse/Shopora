@@ -40,8 +40,7 @@ db.define_table('item_reviews',
     Field('reviewer', 'reference auth_user', default=get_user), # User doing the rating.
     Field('reviewer_email', default=get_user_email),
     Field('reviewer_name', requires=IS_NOT_EMPTY()),
-    Field('likers', type='list:string'), 
-    Field('dislikers', type='list:string'),
+    Field('likers', type='list:string'),
 )
 
 db.define_table('review_photos',
