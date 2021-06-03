@@ -116,7 +116,7 @@ let init = (app) => {
         let id = app.vue.reviews[review_idx].id;
         axios.get(delete_review_url, {params: {id: id}}).then(function ( response){
             for (let i=0; i<app.vue.reviews.length; i++){
-                if(app.vue.reviews[i],id == id){
+                if(app.vue.reviews[i].id == id){
                     app.vue.reviews.reverse().splice(i, 1);
                     app.vue.review_images.splice(i, 1);
                     app.enumerate(app.vue.reviews);
@@ -238,6 +238,21 @@ let init = (app) => {
         app.vue.show_reviews = new_status;
     };
 
+    app.remove_list_item = function(list_id){
+        axios.post(remove_list_item_url,
+            {
+                list_id: list_id,
+            })
+        .then(function (response) {});
+
+        for (let i=0; i<app.vue.lists.length; i++){
+            if(app.vue.lists[i].list_id == list_id){
+                app.vue.lists.splice(i, 1);
+                break;
+            }
+        }
+    };
+
     // ***********************************************************************************
 
     app.methods = {
@@ -267,6 +282,8 @@ let init = (app) => {
         set_likes_enabled: app.set_likes_enabled,
         reset_row: app.reset_row,
         reset_lists: app.reset_lists,
+
+        remove_list_item: app.remove_list_item,
 
     };
 

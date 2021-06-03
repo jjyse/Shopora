@@ -102,27 +102,9 @@ def item(item_id=None):
         get_likerslist_url = URL('get_likerslist', signer=url_signer),
     )
 
-@action('account')
-@action.uses(db, session, auth.user, 'account.html')
-def account():
-    print("User:", get_user_email())
-    return dict()
-
-@action('account/edit')
-@action.uses(db, session, auth.user, 'editaccount.html')
-def editaccount():
-    print("User:", get_user_email())
-    return dict()
-
-@action('account/favorites')
-@action.uses(db, session, auth.user, 'favorites.html')
-def favorites():
-    print("User:", get_user_email())
-    return dict()
-
-@action('account/wishlist')
-@action.uses(db, session, auth.user, 'wishlist.html')
-def wishlist():
+@action('lists')
+@action.uses(db, session, auth.user, 'lists.html')
+def lists():
     print("User:", get_user_email())
     return dict()
 
@@ -130,7 +112,26 @@ def wishlist():
 @action.uses(db, session, auth, 'cart.html')
 def cart():
     print("User:", get_user_email())
-    return dict()
+    return dict(
+        load_items_url = URL('load_items', signer=url_signer),
+        load_curr_item_url = URL('load_curr_item', signer=url_signer),
+        load_reviews_url = URL('load_reviews', signer=url_signer),
+        add_review_url = URL('add_review', signer=url_signer),
+        delete_review_url = URL('delete_review', signer=url_signer),
+
+        upload_url = URL('upload_image', signer=url_signer),
+        get_images_url = URL('get_images', signer=url_signer),
+        load_user_lists_url = URL('load_user_lists', signer=url_signer),
+        create_user_list_url = URL('create_user_list', signer=url_signer),
+
+        remove_list_item_url = URL('remove_list_item', signer=url_signer),
+
+        get_rating_url = URL('get_rating', signer=url_signer),
+        get_name_url = URL('get_name', signer=url_signer),
+        add_liker_url = URL('add_liker', signer=url_signer),
+        remove_liker_url = URL('remove_liker', signer=url_signer),
+        get_likerslist_url = URL('get_likerslist', signer=url_signer),
+    )
 
 @action('support-contact')
 @action.uses(db, session, auth, 'supportcontact.html')
@@ -315,6 +316,7 @@ def load_user_lists():
         rows.append({
             "user_email": list_item.user_email,
             "list_name": list_item.list_name,
+            "list_id": list_item.id,
             "item_id": list_item.item_id,
         })
 
@@ -334,3 +336,12 @@ def create_user_list():
     return dict(
         id=id,
     )
+
+@action('remove_list_item', method="POST")
+@action.uses(db, url_signer.verify())
+def remove_list_item():
+    list_id = request.json.get('list_id')
+    assert list_id is not None
+
+    db(db.list.id == list_id).delete()
+    return "ok"

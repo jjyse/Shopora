@@ -1,9 +1,6 @@
 [[extend 'layout.html']]
 
 <style>
-    [v-cloak] {
-         display: none;
-    }
   [v-cloak] {
       display: none;
   }
@@ -200,8 +197,8 @@
                                 Collection
                               </a>
                               <hr class="dropdown-divider">
-                              <a class="dropdown-item" href="[[=URL('account')]]">
-                                My Account
+                              <a class="dropdown-item" href="[[=URL('lists')]]">
+                                My Lists
                               </a>
                             </div>
                         </div>
@@ -281,8 +278,7 @@
             <!-- Display size buttons  -->
             <div class="divider"></div>
             <div class="item-text2"> SIZE</div>
-            <div class="item-description">
-            </div>
+            <br>
             <div class="item-sizes">
               <div class="dropdown is-hoverable">
                 <div class="dropdown-trigger">
@@ -375,7 +371,7 @@
               <div class="divider"></div>
               <div class="item-text2"> ADD ITEM TO CART </div>
               <br>
-              <button class="item-text3 button">Add to Cart</button>
+              <button class="item-text3 button" @click="create_list('Cart')">Add to Cart</button>
             </div>
             <!-- Display reviews -->
             <div class="divider"></div>
