@@ -4,206 +4,520 @@
     [v-cloak] {
          display: none;
     }
-    .item-container {
-      height: 700px;
-    }
-    .item-box {
-      border: 1px solid rgb(224, 224, 224);
+  [v-cloak] {
+      display: none;
+  }
+  .my-container {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background-color: rgb(255, 255, 255);
+  }
+  .my-container-top-padding {
+      width: 100%;
+      height: 50px;
+  }
+  .store-nav {
+      width: 100%;
+      height: 60px;
+      background-color: black;
+      vertical-align: middle;
+      line-height: 60px;
+      color:white;
+      letter-spacing: 1px;
+      font-size: small;
+      font-weight: 100;
+  }
+  .second-nav {
+      width: 100%;
+      height: 200px;
+      background-color: rgb(0, 0, 0);
+  }
+  .text-1 {
+      font-size: medium;
+      font-weight: 700;
+      color:white;
+      text-decoration: underline;
+  }
+  .carousel {
+      float: left;
+      overflow: hidden;
+      width: 100%;
+  }
+  .page-container {
+      margin-left: 10%;
+      margin-right: 10%;
+      height: 100%;
+      width: 80%;
+  }
+  .item-container {
+      margin-top: 5%;
+      height: 100%;
+      width: 100%;
+  }
+  .item-image-and-description {
+      float: left;
       height: 100%;
       width: 50%;
-    }
-    .item-image {
-      height: 40%;
-      width: 40%;
-      float: left;
-    }
-    .item-name-price {
-      height: 10%;
-      width: 15%;
-      float: left;
-      border: 1px solid rgb(224, 224, 224);
-    }
-    .item-reviews-buttons {
-      height: 100%;
-      width: 20%;
-      margin-left: 60px;
-      float: left;
-      border: 1px solid rgb(224, 224, 224);
-    }
-    .item-reviews {
-      height: 100%;
-      width: 40%;
-      float: right;
-      border: 1px solid rgb(224, 224, 224);
-      overflow-y: scroll;
-      overflow-x: hidden;
-    }
-
-    .pink {
-      background-color: pink
-    }
-    .orange {
-      background-color: rgb(248, 172, 85)
-    }
-    .blue {
-      background-color: rgb(76, 211, 221)
-    }
-    .red {
-      background-color: rgb(190, 89, 106)
-    }
-    .green {
-      background-color: rgb(85, 248, 180)
-    }
-    .purple {
-      background-color: rgb(103, 76, 221)
-    }
+  }
+  .item-image {
+      height: 90%;
+      width: 90%;
+  }
+  .item-description {
+    padding: 2%;
+    width: 90%;
+  }
+  .item-other-details {
+    float: left;
+    height: 100%;
+    width: 50%;
+  }
+  .item-name {
+    padding: 2%;
+    height: 10%;
+    width: 100%;
+    font-size: xx-large;
+    font-weight: 100;
+    color:rgb(0, 0, 0);
+  }
+  .item-price-deco-rating {
+    vertical-align: middle;
+    line-height: 20px;
+    padding-left: 2%;
+    height: 10%;
+    width: 100%;
+  }
+  .item-price {
+    float: left;
+    font-size: x-large;
+    font-weight: 700;
+    color:rgb(110, 110, 110);
+  }
+  .item-text1 {
+    margin-left: 2%;
+    float: left;
+    font-size: small;
+    font-weight: 100;
+    color:rgb(0, 0, 0);
+    text-decoration: underline;
+  }
+  .item-text2 {
+    margin-left: 2%;
+    float: left;
+    font-size: small;
+    font-weight: 700;
+    color:rgb(0, 0, 0);
+    letter-spacing: 2px;
+  }
+  .item-text3 {
+    margin: 2%;
+  }
+  .item-text4 {
+    margin-left: 2%;
+  }
+  .buttons {
+    padding-left: 2%;
+    height: 10%;
+    width: 100%;
+  }
+  .shopora-buttons {
+    margin-right: 10px;
+    padding: 2px;
+    float:left;
+  }
+  .divider {
+    margin: 2%;
+    border-top: solid;
+    border-width: 1px;
+  }
+  .item-rating {
+    margin-left: 2%;
+    float: left;
+    letter-spacing: 2px;
+    font-size: medium;
+    font-weight: 100;
+    color:rgb(0, 0, 0);
+  }
+  .item-sizes {
+    padding-left: 2%;
+    height: 10%;
+    width: 100%;
+  }
+  .item-list {
+    padding-left: 2%;
+    height: 10%;
+    width: 100%;
+  }
+  .item-add-to-cart {
+    height: 10%;
+    width: 100%;
+  }
+  .item-checkout {
+    height: 10%;
+    width: 100%;
+  }
+  @media (max-width: 799px) {
+      .fd {display: none;}
+  }
+  .pink {
+    background-color: pink
+  }
+  .orange {
+    background-color: rgb(248, 172, 85)
+  }
+  .blue {
+    background-color: rgb(76, 211, 221)
+  }
+  .red {
+    background-color: rgb(190, 89, 106)
+  }
+  .black {
+    background-color: rgb(0, 0, 0)
+  }
+  .white {
+    color: rgb(255, 255, 255)
+  }
     </style>
 
-<div class="section" id="vue-target" v-cloak>
-  
-    <div class="item-container">
-        <div v-for="row in curr_item">
-            <div class="item-box">
-                <div class="item-image">
-                    <img v-bind:src="row.item_image">
-                </div>
-                <div class="item-name-price">
-                    {{ row.item_name }} 
-                    <br>
-                    {{ row.item_price }}
-                </div>
-            </div>
-        </div>
-        <!-- **************************Item Reviews******************************* -->
-        <div class="item-reviews-buttons">
+<div class="hero is-fullheight" id="vue-target" v-cloak>
 
-          <!-- ********* Write a review here ********* -->
-          <div v-if="review_post_mode == false">
-            <button class="button is-primary" @click="set_mode(true)">
-                <i class="fa fa-plus fa-fw"></i>
-            </button>
-          </div>
-          <div v-if="review_post_mode">
-            <div>
-              <!-- ********* Set the star rating ********* -->
-              <span @mouseout="stars_out">
-                <span @mouseover="stars_over(star_idx)"
-                      @click="set_stars(star_idx)"
-                      v-for="star_idx in [1, 2, 3, 4, 5]">
-                  <i v-if="star_idx <= current_rating_display" class="fa fa-star"></i>
-                  <i v-if="star_idx > current_rating_display" class="fa fa-star-o"></i>
-                </span>
-              </span>
-            </div>
+  <div class="my-container">
+    <div class="my-container-top-padding"></div>
+
+    <div class="store-nav">
+        <nav class="level is-mobile">
+            <p class="level-item">
+                <div class="dropdown is-hoverable">
+                    <div class="dropdown-trigger">
+                        <div class="text-1">
+                            SHOPORA
+                            <i class="fa fa-angle-down white" aria-hidden="true"></i>
+                        </div>
+                        <div class="dropdown-menu" id="dropdown-menu4" role="menu">
+                            <div class="dropdown-content">
+                              <a class="dropdown-item" href="[[=URL('collection')]]">
+                                Collection
+                              </a>
+                              <hr class="dropdown-divider">
+                              <a class="dropdown-item" href="[[=URL('account')]]">
+                                My Account
+                              </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </p>
+            <p class="level-item fd">
+                    &nbsp
+                    <i class="fa fa-plane" aria-hidden="true"></i>
+                    &nbsp
+                    FREE SHIPPING ON ORDERS OVER $50 
+                    &nbsp
+                    <i class="fa fa-plane" aria-hidden="true"></i>
+                    &nbsp
+            </p>
             
-            <div class="block">
-                <textarea class="textarea" placeholder="Write your review here" v-model="review_content"></textarea>
-            </div>
-
-            <div class="block is-tight">
-              <div class="file is-info">
-                <label class="file-label">
-                  <input class="file-input" type="file"
-                         accept=".jpg, .png, .jpeg, .gif, .bmp, .tif, .tiff|image/*"
-                         @change="upload_file($event)">
-                  <span class="file-cta">
-                    <span class="file-label">
-                      <span><i class="fa fa-upload"></i></span>
+            <p class="level-item fd">
+                    FOLLOW US ON SOCIAL MEDIA - 
+                    <span class="icon" style="color: rgb(194, 194, 194);">
+                        <i class="fa fa-twitter"></i>
                     </span>
-                  </span>
-                </label>
-              </div>
-            </div>
-    
-            <div class="block">
-                <a class="button is-primary" @click="add_review">
-                        Post
-                </a>
-                <a class="button is-warning" @click="set_mode(false)">
-                    Cancel
-                </a>
-            </div>
-          </div>
-
-        <!-- ************************** User Lists ******************************* -->
-        <div v-if="create_new_list_mode == false">
-          <button class="button is-primary" @click="set_create_new_list_mode(true)">
-              Add to New List
-          </button>
-        </div>
-        <div v-if="create_new_list_mode">
-
-          <div class="block">
-            <textarea class="input" placeholder="Enter a new list name here" v-model="new_list_name"></textarea>
-          </div>
-
-          <div class="block">
-
-
-            <div v-for="ln in list_names">
-              <button @click="create_list(ln)"> {{ ln }} </button>
-            </div>
-
-            <a class="button is-primary" @click="create_list(new_list_name)">
-              Submit
-            </a>
-            <a class="button is-warning" @click="set_create_new_list_mode(false)">
-              Cancel
-            </a>
-          </div>
-        </div>
-
-        </div>
-
-        <!-- ********* Show the list of reviews here ********* -->
-        <div class="item-reviews">
-          Reviews
-        <div v-for="review in reviews.slice().reverse()">
-          <div class="notification" v-if="review.item_id == curr_item[0].item_id">
-              <div>{{review.review_content}}</div>
-              <div class="has-text-grey">{{review.reviewer_name}}</div>
-
-              <div class="columns">
-
-                <div class="column is-1">
-                  <button v-if="review.liked" @mouseenter="set_curr_row(review._idx); get_likers_list(review._idx); set_likes_enabled(true);" @mouseleave="set_likes_enabled(false); reset_lists(); reset_row();" @click="set_liked_mode(review._idx, false); unlike_post(review._idx);">
-                    <i class="fa fa-fw fa-thumbs-up"></i>
-                  </button>
-                  <button v-else @mouseenter="set_curr_row(review._idx); get_likers_list(review._idx); set_likes_enabled(true);" @mouseleave="set_likes_enabled(false); reset_lists(); reset_row();" @click="set_liked_mode(review._idx, true); set_disliked_mode(review._idx, false); like_post(review._idx); undislike_post(review._idx);">
-                    <i class="fa fa-fw fa-thumbs-o-up"></i>
-                  </button>
-                  <button v-if="review.disliked" @mouseenter="set_curr_row(review._idx); get_dislikers_list(review._idx); set_dislikes_enabled(true);" @mouseleave="set_dislikes_enabled(false); reset_lists(); reset_row();" @click="set_disliked_mode(review._idx, false); undislike_post(review._idx);">
-                    <i class="fa fa-fw fa-thumbs-down"></i>
-                  </button>
-                  <button v-else @mouseenter="set_curr_row(review._idx); get_dislikers_list(review._idx); set_dislikes_enabled(true);" @mouseleave="set_dislikes_enabled(false); reset_lists(); reset_row();" @click="set_disliked_mode(review._idx, true); set_liked_mode(review._idx, false); dislike_post(review._idx); unlike_post(review._idx);">
-                    <i class="fa fa-fw fa-thumbs-o-down"></i>
-                  </button>
-                </div>
-
-                <div class="column is-10">
-                  <div v-if="review._idx == curr_row && likes_enabled && likers_list.length > 0">
-                    <h1 style="color:blue;font-size:12px;">Liked by {{likers_list}}</h1>
-                  </div>
-                  <div v-if="review._idx == curr_row && dislikes_enabled && dislikers_list.length > 0">
-                    <h1 style="color:blue;font-size:12px;">Disliked by {{dislikers_list}}</h1>
-                  </div>
-                </div>
-                
-                <div class="column">
-                  <div v-if="review.reviewer_email == add_email">
-                    <button @click="delete_review(review._idx)" class="button is-danger">
-                      <i class="fa fa-trash"></i>
-                    </button>
-                  </div>
-                </div>
-
-              </div>
-
-          </div>
-        </div>
-        <!-- ************************************************* -->
-        </div>
+                    <span class="icon" style="color: rgb(194, 194, 194);">
+                        <i class="fa fa-instagram"></i>
+                    </span>
+                    <span class="icon" style="color: rgb(194, 194, 194);">
+                        <i class="fa fa-facebook"></i>
+                    </span>
+            </p>
+            <p class="level-item fd"></p>
+          </nav>
     </div>
+    
+    <!-- Begin item display page -->
+    <div class="page-container">
+
+      <!-- Retrieve item image and details -->
+      <div v-for="row in curr_item">
+        <div class="item-container">
+          <div class="item-image-and-description">
+            <!-- Retrieve item image -->
+            <div class="item-image">
+              <img v-bind:src="row.item_image">
+            </div>
+            <div class="item-description">
+            </div>
+          </div>
+          <div class="item-other-details">
+            <!-- Retrieve item name -->
+            <div class="item-name">
+              {{ row.item_name }}
+            </div>
+            <!-- Retrieve item price -->
+            <div class="item-price-deco-rating red">
+              <div class="item-price">
+                {{ row.item_price }}
+              </div>
+              <!-- Display decoration text -->
+              <div class="item-text1">
+                FREE shipping and returns
+              </div>
+              <!-- Retrieve item average rating -->
+              <div class="item-rating">
+                <span v-for="star_idx in [1, 2, 3, 4, 5]">
+                  <i class="fa fa-star"></i>
+                </span>
+              </div>
+            </div>
+            <div class="item-description">
+            </div>
+            <!-- Retrieve item description -->
+            <div class="item-description">
+              This is SHOPORA DESIGN – your go-to for all the latest trends, 
+              no matter who you are, where you’re from and what you’re up to. 
+              Exclusive to SHOPORA, our universal brand is here for you, and 
+              comes in Plus and Tall. Created by us, styled by you.
+            </div>
+            <!-- Display size buttons  -->
+            <div class="divider"></div>
+            <div class="item-text2"> SIZE</div>
+            <div class="item-description">
+            </div>
+            <div class="item-sizes">
+              <div class="dropdown is-hoverable">
+                <div class="dropdown-trigger">
+                  <button class="button">
+                    <span>Select a size</span>
+                    <span class="icon is-small">
+                      <i class="fa fa-angle-down" aria-hidden="true"></i>
+                    </span>
+                  </button>
+                </div>
+                <div class="dropdown-menu">
+                  <div class="dropdown-content">
+                    <a class="dropdown-item">
+                      Small
+                    </a>
+                    <hr class="dropdown-divider">
+                    <a class="dropdown-item">
+                      Medium
+                    </a>
+                    <hr class="dropdown-divider">
+                    <a class="dropdown-item">
+                      Large
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="item-description">
+            </div>
+            <!-- Retrieve item lists/ Add to an item list -->
+            <div class="item-text2"> ADD TO LIST </div>
+            <div class="item-description">
+            </div>
+            <div class="item-list">
+              <div class="dropdown is-hoverable">
+                <div class="dropdown-trigger">
+                  <button class="button">
+                    <span>Select a list</span>
+                    <span class="icon is-small">
+                      <i class="fa fa-angle-down" aria-hidden="true"></i>
+                    </span>
+                  </button>
+                </div>
+                <div class="dropdown-menu">
+                  <div class="dropdown-content">
+                    <a class="dropdown-item" @click="create_list('Wishlist')">
+                      Wishlist
+                    </a>
+                    <hr class="dropdown-divider">
+                    <a class="dropdown-item" @click="create_list('Favorites')">
+                      Favorites
+                    </a>
+                    <div v-for="listname in get_list_names(lists)">
+                      <div v-if="(listname != 'Wishlist') && (listname != 'Favorites') && (listname != 'Cart')">
+                        <hr class="dropdown-divider">
+                        <a class="dropdown-item" @click="create_list(listname)">
+                          {{ listname }}
+                        </a>
+                      </div>
+                    </div>
+                    <hr class="dropdown-divider">
+                    <a class="dropdown-item" @click="set_create_new_list_mode(true)">
+                      Create a new list
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Section to create/find a list and add the item to it appears here -->
+            <div v-if="create_new_list_mode">
+              <div class="divider"></div>
+              <div class="item-text2"> CREATE OR ADD TO EXISTING LIST 
+                <i class="fa fa-caret-down" aria-hidden="true"></i>
+              </div>
+              <div class="control">
+                <input class="input item-text3" type="text" placeholder="Enter list name" v-model="new_list_name">
+              </div>
+              <div class="buttons">
+                <a class="shopora-buttons" @click="create_list(new_list_name)">
+                  Submit
+                </a>
+                <a class="shopora-buttons" @click="set_create_new_list_mode(false)">
+                  Cancel
+                </a>
+              </div>
+            </div>
+
+            <!-- Display add to cart button -->
+            <div class="item-add-to-cart">
+              <div class="divider"></div>
+              <div class="item-text2"> ADD TO CART </div>
+              <div class="control">
+                <input class="input item-text3" type="text" placeholder="Enter list name" v-model="new_list_name">
+              </div>
+            </div>
+            <!-- Display reviews -->
+            <div class="divider"></div>
+            <a class="item-reviews">
+              <div class="item-text2" @click="show_reviews_mode(true)"> REVIEWS 
+                <i class="fa fa-caret-down" aria-hidden="true"></i>
+              </div>
+              <div v-if="show_reviews">
+                <div class="buttons">
+                  <a class="shopora-buttons" @click="show_review_writing_mode(true)">
+                    Write a review
+                  </a>
+                  <a class="shopora-buttons" @click="show_reviews_mode(false);show_review_writing_mode(false)">
+                    Hide
+                  </a>
+                </div>
+                <!-- If user wants to write a review, they can do so here -->
+                <div v-if="review_writing_mode">
+                  <div class="divider"></div>
+                  <div class="item-text2"> WRITE A REVIEW 
+                    <i class="fa fa-caret-down" aria-hidden="true"></i>
+                  </div>
+                  <br>
+
+                  <div class="item-text4">
+                    <article class="media">
+                      <div class="media-content">
+                        <div class="field">
+                          <p class="control">
+                            <textarea class="textarea" placeholder="Add a comment..." v-model="review_content"></textarea>
+                          </p>
+                        </div>
+                        <nav class="level">
+                          <div class="level-left">
+                            <a class="level-item">
+                              <span class="shopora-buttons" @click="add_review();show_review_writing_mode(false)">Submit</span>
+                            </a>
+                            <a class="level-item">
+                              <span class="shopora-buttons" @click="show_review_writing_mode(false)">Cancel</span>
+                            </a>
+                            <a class="level-item">
+                              
+                              <div class="file is-info">
+                                <label class="file-label">
+                                  <input class="file-input" type="file"
+                                         accept=".jpg, .png, .jpeg, .gif, .bmp, .tif, .tiff|image/*"
+                                         @change="upload_file($event)">
+                                         <span><i class="fa fa-upload"></i></span>
+                                </label>
+                              </div>
+                            </a>
+                          </div>
+                          <div class="level-right">
+                            <div class="level-item">
+                              <!-- ********* Set the star rating ********* -->
+                              <span @mouseout="stars_out">
+                                <span @mouseover="stars_over(star_idx)"
+                                      @click="set_stars(star_idx)"
+                                      v-for="star_idx in [1, 2, 3, 4, 5]">
+                                  <i v-if="star_idx <= current_rating_display" class="fa fa-star"></i>
+                                  <i v-if="star_idx > current_rating_display" class="fa fa-star-o"></i>
+                                </span>
+                              </span>
+                            </div>
+                          </div>
+                        </nav>
+                      </div>
+                      <div class="media-right">
+                        <p class="image is-64x64">
+                          <img v-bind:src="image">
+                        </p>
+                      </div>
+                    </article>
+                  </div>
+
+                </div>
+                <!-- If user wants to see reviews, they are displayed here -->
+                <div class="item-text4">
+                  <div v-for="review in reviews.slice().reverse()">
+                    <br>
+                      <article class="media" v-if="review.item_id == curr_item[0].item_id">
+                        <div class="media-content">
+                          <div class="content">
+                            <p>
+                              <strong>
+                                {{ review.reviewer_name }}
+                              </strong>
+                              <br>
+                              <small>
+                                <span 
+                                  v-for="star_idx in [1, 2, 3, 4, 5]">
+                                  <i v-if="star_idx <= review.rating" class="fa fa-star"></i>
+                                  <i v-if="star_idx > review.rating" class="fa fa-star-o"></i>
+                                </span>
+                              </small>
+                              <br>
+                              {{ review.review_content }}
+                            </p>
+                          </div>
+                          <nav class="level is-mobile">
+                            <div class="level-left">
+                              <a class="level-item">
+                                <span class="icon is-small"><i class="fa fa-fw fa-thumbs-up"></i></span>
+                              </a>
+                              <a class="level-item">
+                                <span class="icon is-small"><i class="fa fa-fw fa-thumbs-down"></i></span>
+                              </a>
+                              <a class="level-item">
+                                <span v-if="review.reviewer_email == add_email" class="icon is-small" @click="delete_review(review._idx)"><i class="fa fa-trash"></i></span>
+                              </a>
+                            </div>
+                          </nav>
+                        </div>
+                        <div v-for="review_img in review_images">
+                          <div v-if="(review_img.id == review.id) || (review_img.item_reviews_id == review.id)">
+                            <div class="media-right">
+                              <p class="image is-64x64">
+                                  <img v-bind:src="review_img.image">
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                      </article>
+                  </div>
+                </div>
+
+                <!-- ***************************************************** -->
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <!-- End item display pagee -->
+
+      <!-- Begin footer -->
+
+      <!-- End footer -->
+
+  </div>
 
 </div>
 

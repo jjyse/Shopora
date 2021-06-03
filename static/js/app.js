@@ -19,6 +19,7 @@ let init = (app) => {
         new_list_name: "",
 
         // Data related to review writing
+        review_writing_mode: false,
         review_post_mode: false,
         review_content: "",
         reviews: [],
@@ -27,6 +28,7 @@ let init = (app) => {
         num_stars: 0,
         image: null,
         review_images: [],
+        show_reviews: false,
 
         // Data related to likes/dislikes
         likes_enabled: false,
@@ -126,6 +128,10 @@ let init = (app) => {
             }
         });
     }
+
+    app.show_review_writing_mode = function(new_status){
+        app.vue.review_writing_mode = new_status;
+    };
 
     app.enumerate = (a) => {
         // This adds an _idx field (THE ROW INDEX) to each element of the array.
@@ -253,6 +259,10 @@ let init = (app) => {
         return [...new Set(list_names)];
     };
 
+    app.show_reviews_mode = function(new_status){
+        app.vue.show_reviews = new_status;
+    };
+
     // ***********************************************************************************
 
     app.methods = {
@@ -267,6 +277,8 @@ let init = (app) => {
         set_create_new_list_mode: app.set_create_new_list_mode,
         reset_list: app.reset_list,
         get_list_names: app.get_list_names,
+        show_reviews_mode: app.show_reviews_mode,
+        show_review_writing_mode: app.show_review_writing_mode,
 
         set_stars: app.set_stars,
         stars_out: app.stars_out,
@@ -333,7 +345,7 @@ let init = (app) => {
                             }
                         }
                     }
-                    axios.get(get_rating_url, {params: {"item_id": rows[i].item_id}})
+                    axios.get(get_rating_url, {params: {"review_id": rows[i].id}})
                         .then((result) => {
                             rows[i].rating = result.data.rating;
                             rows[i].num_stars_display = result.data.rating;

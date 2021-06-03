@@ -1,5 +1,5 @@
 [
-    {"item_name": "Men's brown dress shoe", "item_description": "", "item_price": "$45.40", "item_image": "/Shopora/static/js/assets/1.jpg"},
+    {"item_name": "Men's brown dress shoe", "item_description": "This is SHOPORA DESIGN – your go-to for all the latest trends, no matter who you are, where you’re from and what you’re up to. Exclusive to SHOPORA, our universal brand is here for you, and comes in Plus and Tall. Created by us, styled by you.", "item_price": "$45.40", "item_image": "/Shopora/static/js/assets/1.jpg"},
     {"item_name": "Gold banded watch", "item_description": "", "item_price": "$35.00", "item_image": "/Shopora/static/js/assets/2.jpg"},
     {"item_name": "Men's blue button top", "item_description": "", "item_price": "$26.50", "item_image": "/Shopora/static/js/assets/3.jpg"},
     {"item_name": "Women's black handbag", "item_description": "", "item_price": "$25.00", "item_image": "/Shopora/static/js/assets/4.jpg"},

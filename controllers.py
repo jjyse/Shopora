@@ -234,9 +234,8 @@ def delete_review():
 @action('get_rating')
 @action.uses(url_signer.verify(), db)
 def get_rating():
-    item_id = request.params.get('item_id')
-    row = db((db.item_reviews.item_id == item_id) &
-             (db.item_reviews.reviewer == get_user())).select().first()
+    review_id = request.params.get('review_id')
+    row = db(db.item_reviews.id == review_id).select()
     rating = row.rating if row is not None else 0
     return dict(rating=rating)
 
