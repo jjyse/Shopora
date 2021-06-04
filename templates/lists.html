@@ -36,15 +36,208 @@
       color:white;
       text-decoration: underline;
   }
+  .carousel {
+      float: left;
+      overflow: hidden;
+      width: 100%;
+  }
   .page-container {
-      margin-left: 10%;
-      margin-right: 10%;
-      margin-top: 5%;
-      height: 60%;
-      width: 80%;
+      margin-left: 25%;
+      margin-right: 25%;
+      height: 100%;
+      width: 50%;
+  }
+  .item-image-and-description {
+      float: left;
+      height: 100%;
+      width: 30%;
+  }
+  .item-image {
+      height: 90%;
+      width: 90%;
+  }
+  .item-description {
+    padding: 2%;
+    width: 90%;
+  }
+  .item-other-details {
+    float: left;
+    height: 100%;
+    width: 50%;
+  }
+  .item-name {
+    padding: 2%;
+    height: 20%;
+    width: 100%;
+    font-size: large;
+    font-weight: 100;
+    color:rgb(0, 0, 0);
+  }
+  .item-price-deco-rating {
+    padding-left: 2%;
+    height: 20%;
+    width: 100%;
+    border-bottom: solid;
+    border-width: thin;
+  }
+  .item-price {
+    float: left;
+    font-size: medium;
+    font-weight: 700;
+    color:rgb(110, 110, 110);
+  }
+  .item-text1 {
+    margin-left: 2%;
+    float: left;
+    font-size: small;
+    font-weight: 100;
+    color:rgb(0, 0, 0);
+    text-decoration: underline;
+  }
+  .item-text2 {
+    margin-left: 2%;
+    float: left;
+    font-size:  x-small;
+    font-weight: 700;
+    color:rgb(0, 0, 0);
+  }
+  .item-text3 {
+    margin: 2%;
+  }
+  .item-text4 {
+    margin-left: 2%;
+  }
+  .item-text5 {
+    margin: 2%;
+    font-size: small;
+    font-weight: 100;
+    color:rgb(0, 0, 0);
+  }
+  .buttons {
+    padding-left: 2%;
+    height: 10%;
+    width: 100%;
+  }
+  .shopora-buttons {
+    margin-right: 10px;
+    padding: 2px;
+    float:left;
+  }
+  .divider {
+    margin: 2%;
+    border-top: solid;
+    border-width: 1px;
+  }
+  .item-rating {
+    margin-left: 2%;
+    float: left;
+    letter-spacing: 2px;
+    font-size: medium;
+    font-weight: 100;
+    color:rgb(0, 0, 0);
+  }
+  .item-sizes {
+    padding-left: 2%;
+    height: 10%;
+    width: 100%;
+  }
+  .item-list {
+    padding-left: 2%;
+    height: 10%;
+    width: 100%;
+  }
+  .item-add-to-cart {
+    height: 10%;
+    width: 100%;
+  }
+  .item-checkout {
+    height: 10%;
+    width: 100%;
   }
   @media (max-width: 799px) {
-      .fd {display: none;}
+    .fd {display: none;}
+  }
+  .cart-title {
+    float:left;
+    height: 5%;
+    margin-top: 5%;
+    width: 100%;
+    letter-spacing: 2px;
+  }
+  .cart-title-title {
+    float:left;
+    height: 90%;
+    width: 50%;
+    font-size: xx-large;
+    font-weight: 100;
+    margin-bottom: 1%;
+  }
+  .list-title-name {
+    float: left;
+    height: 50%;
+    width: 25%;
+    text-align: left;
+    font-size: xx-large;
+    font-weight: 100;
+  }
+  .list-title-share {
+    font-size: small;
+    font-weight: 700;
+    color:rgb(0, 0, 0);
+    float: left;
+    height: 50%;
+    width: 13%;
+    margin-top: 3%;
+    text-align: right;
+  }
+  .list-title-delete {
+    font-size: small;
+    font-weight: 700;
+    color:rgb(0, 0, 0);
+    float: left;
+    height: 50%;
+    width: 12%;
+    margin-top: 3%;
+    text-align: right;
+  }
+  .lists-left {
+    margin-top: 3%;
+    float:left;
+    width: 50%;
+    height: 60%;
+  }
+  .lists-right {
+    margin-top: 3%;
+    float:left;
+    width: 50%;
+    height: 60%;
+  }
+  .item-container {
+    width: 100%;
+    height: 150px;
+    margin-bottom: 5%;
+  }
+  .remove-item {
+    float: left;
+    font-size: x-small;
+    font-weight: 700;
+    color:rgb(0, 0, 0);
+    float: left;
+    height: 12%;
+    width: 100%;
+    margin-top: 12%;
+    margin-left: 2%;
+  }
+  .list-name {
+    width: 90%;
+    height: 10%;
+    font-size: x-large;
+    font-weight: 100;
+    margin-bottom: 1%;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    border-bottom: solid;
+    border-width: thin;
   }
 
   .pink {
@@ -65,7 +258,7 @@
   .white {
     color: rgb(255, 255, 255)
   }
-</style>
+    </style>
 
 <div class="hero is-fullheight" id="vue-target" v-cloak>
 
@@ -121,16 +314,77 @@
           </nav>
     </div>
     
-
-    <div class="page-container pink">
-      <div class="collection-navbar">
-
+    <!-- Begin item display page -->
+    <div class="page-container">
+      <div class="cart-title">
+        <div class="cart-title-title">
+          My Lists
+        </div>
+        <div class="list-title-name" @click="delete_list('Cart')"> 
+          List Name
+        </div>
+        <div class="list-title-share" @click=""> 
+          SHARE
+        </div>
+        <div class="list-title-delete" @click=""> 
+          DELETE
+        </div>
       </div>
-      <!-- Begin item display page -->
+      <!-- The left side of the My Lists page -->
+      <div class="lists-left">
+        <div v-for="listname in get_list_names(lists)">
+          <div v-if="listname != 'Cart'">
+            <div class="list-name" @click="">
+              {{ listname }}
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- The right side of the My Lists page -->
+      <div class="lists-right">
+
+          <!-- Retrieve item image and details -->
+          <div v-for="list in lists"> 
+            <div v-if="list.list_name == 'Cart'">
+              <div v-for="row in items">
+                <div v-if="row.id == list.item_id">
+                  <div class="item-container">
+
+                      <div class="item-image-and-description">
+                        <!-- Retrieve item image -->
+                        <div class="item-image">
+                          <img v-bind:src="row.item_image">
+                        </div>
+                        <div class="item-description">
+                        </div>
+                      </div>
+                      <div class="item-other-details">
+                        <!-- Retrieve item name -->
+                        <div class="item-name">
+                          {{ row.item_name }}
+                        </div>
+                        <!-- Retrieve item price -->
+                        <div class="item-price-deco-rating">
+                          <div class="item-price">
+                            {{ row.item_price }}
+                          </div>
+                        </div>
+                        <!-- Option to remove item from list -->
+                        <div class="remove-item">
+                          REMOVE ITEM
+                        </div>
+                      </div>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
 
     </div>
-
-      <!-- End item display pagee -->
+    <!-- End item display pagee -->
 
       <!-- Begin footer -->
 
@@ -152,8 +406,8 @@
   let get_images_url = "[[=XML(get_images_url)]]";
   let load_user_lists_url = "[[=XML(load_user_lists_url)]]";
   let create_user_list_url = "[[=XML(create_user_list_url)]]";
-  let add_list_item_url = "[[=XML(add_list_item_url)]]";
   let remove_list_item_url = "[[=XML(remove_list_item_url)]]";
+  let delete_list_url = "[[=XML(delete_list_url)]]";
 
   let get_rating_url = "[[=XML(get_rating_url)]]";
   let add_liker_url = "[[=XML(add_liker_url)]]";

@@ -253,6 +253,20 @@ let init = (app) => {
         }
     };
 
+    app.delete_list = function(list_name){
+
+        axios.post(delete_list_url,
+            {
+                list_name: list_name,
+            })
+        .then(function (response) {});
+
+        var newItems = app.vue.lists.filter(function(item) {
+            return item.list_name !== list_name;
+        });
+        app.vue.lists=newItems;
+    };
+
     // ***********************************************************************************
 
     app.methods = {
@@ -284,6 +298,7 @@ let init = (app) => {
         reset_lists: app.reset_lists,
 
         remove_list_item: app.remove_list_item,
+        delete_list: app.delete_list,
 
     };
 
