@@ -17,6 +17,7 @@ let init = (app) => {
         list_names: [],
         create_new_list_mode: false,
         new_list_name: "",
+        current_list: "",
 
         // Data related to review writing
         review_writing_mode: false,

@@ -320,13 +320,13 @@
         <div class="cart-title-title">
           My Lists
         </div>
-        <div class="list-title-name" @click="delete_list('Cart')"> 
-          List Name
+        <div class="list-title-name"> 
+          {{ current_list }}
         </div>
         <div class="list-title-share" @click=""> 
           SHARE
         </div>
-        <div class="list-title-delete" @click=""> 
+        <div class="list-title-delete" @click="delete_list(current_list)"> 
           DELETE
         </div>
       </div>
@@ -334,7 +334,7 @@
       <div class="lists-left">
         <div v-for="listname in get_list_names(lists)">
           <div v-if="listname != 'Cart'">
-            <div class="list-name" @click="">
+            <div class="list-name" @click="current_list = listname">
               {{ listname }}
             </div>
           </div>
@@ -345,7 +345,7 @@
 
           <!-- Retrieve item image and details -->
           <div v-for="list in lists"> 
-            <div v-if="list.list_name == 'Cart'">
+            <div v-if="list.list_name == current_list">
               <div v-for="row in items">
                 <div v-if="row.id == list.item_id">
                   <div class="item-container">
@@ -370,7 +370,7 @@
                           </div>
                         </div>
                         <!-- Option to remove item from list -->
-                        <div class="remove-item">
+                        <div class="remove-item" @click="remove_list_item( list.list_id )">
                           REMOVE ITEM
                         </div>
                       </div>
