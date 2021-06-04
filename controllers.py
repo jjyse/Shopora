@@ -120,6 +120,7 @@ def lists():
 
         remove_list_item_url = URL('remove_list_item', signer=url_signer),
         delete_list_url = URL('delete_list', signer=url_signer),
+        share_list_url = URL('share_list', signer=url_signer),
 
         get_rating_url = URL('get_rating', signer=url_signer),
         get_name_url = URL('get_name', signer=url_signer),
@@ -374,4 +375,24 @@ def delete_list():
     assert list_name is not None
 
     db(db.list.list_name == list_name).delete()
+    return "ok"
+
+@action('share_list', method="POST")
+@action.uses(db, url_signer.verify())
+def share_list():
+    list_name = request.json.get('list_name')
+    email = request.json.get('email')
+    assert email is not None
+    assert list_name is not None
+
+    for list_item in db((db.list.user == get_user) & (db.list.list_name == list_name)).select():
+        for find_user in db(db.auth_user.email == email).select():
+            db.list.insert(
+                user=int(find_user.id),
+                # user=1,
+                user_email=str(find_user.email),
+                list_name=list_name + '(' + get_user_email() + ')',
+                item_id=list_item.item_id,
+            )
+
     return "ok"

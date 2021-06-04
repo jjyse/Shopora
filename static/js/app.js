@@ -18,6 +18,9 @@ let init = (app) => {
         create_new_list_mode: false,
         new_list_name: "",
         current_list: "",
+        list_share_mode: false,
+        submit_share_mode: false,
+        share_list_email: "",
 
         // Data related to review writing
         review_writing_mode: false,
@@ -268,6 +271,24 @@ let init = (app) => {
         app.vue.lists=newItems;
     };
 
+    app.set_list_share_mode = function(new_status){
+        if (new_status == false) {
+            app.vue.add_email = "";
+        }
+        app.vue.list_share_mode = new_status;
+    };
+
+    app.share_list = function(list_name, email) {
+        axios.post(share_list_url,
+            {
+                list_name: list_name,
+                email: email,
+            })
+        .then(function (response) {});
+        app.vue.list_share_mode = false;
+        app.vue.share_list_email = false;
+    }
+
     // ***********************************************************************************
 
     app.methods = {
@@ -284,6 +305,7 @@ let init = (app) => {
         get_list_names: app.get_list_names,
         show_reviews_mode: app.show_reviews_mode,
         show_review_writing_mode: app.show_review_writing_mode,
+        share_list: app.share_list,
 
         set_stars: app.set_stars,
         stars_out: app.stars_out,
@@ -297,6 +319,8 @@ let init = (app) => {
         set_likes_enabled: app.set_likes_enabled,
         reset_row: app.reset_row,
         reset_lists: app.reset_lists,
+        set_list_share_mode: app.set_list_share_mode,
+
 
         remove_list_item: app.remove_list_item,
         delete_list: app.delete_list,

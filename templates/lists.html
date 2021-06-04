@@ -239,6 +239,23 @@
     border-bottom: solid;
     border-width: thin;
   }
+  .list-share-form-container {
+    width: 100%;
+    height: 100px;
+    margin-bottom: 5%;
+  }
+  .input-email {
+    width: 95%;
+    height: 50px;
+  }
+  .list-share-form-submit {
+    float: left;
+    margin-left: 2%;
+  }
+  .list-share-form-cancel {
+    float: left;
+    margin-left: 2%;
+  }
 
   .pink {
     background-color: pink
@@ -323,7 +340,7 @@
         <div class="list-title-name"> 
           {{ current_list }}
         </div>
-        <div class="list-title-share" @click=""> 
+        <div class="list-title-share" @click="set_list_share_mode(true)"> 
           SHARE
         </div>
         <div class="list-title-delete" @click="delete_list(current_list)"> 
@@ -342,6 +359,22 @@
       </div>
       <!-- The right side of the My Lists page -->
       <div class="lists-right">
+
+        <!-- If the user wants to share a list with another user, they can
+        fill the form here -->
+        <div v-if="(list_share_mode) && (current_list != '')">
+          <div class="list-share-form-container">
+            <div class="input-email">
+              <input class="input item-text3" type="text" placeholder="Enter recipient email" v-model="share_list_email">
+            </div>
+            <div class="list-share-form-submit button" @click="share_list(current_list, share_list_email)">
+              Submit
+            </div>
+            <div class="list-share-form-cancel button" @click="share_list_email = '';list_share_mode = false;">
+              Cancel
+            </div>
+          </div>
+        </div>
 
           <!-- Retrieve item image and details -->
           <div v-for="list in lists"> 
@@ -408,6 +441,7 @@
   let create_user_list_url = "[[=XML(create_user_list_url)]]";
   let remove_list_item_url = "[[=XML(remove_list_item_url)]]";
   let delete_list_url = "[[=XML(delete_list_url)]]";
+  let share_list_url = "[[=XML(share_list_url)]]";
 
   let get_rating_url = "[[=XML(get_rating_url)]]";
   let add_liker_url = "[[=XML(add_liker_url)]]";
