@@ -79,12 +79,13 @@
     width: 100%;
     border-bottom: solid;
     border-width: thin;
+    border-color: rgb(211, 211, 211);
   }
   .item-price {
     float: left;
     font-size: medium;
     font-weight: 700;
-    color:rgb(110, 110, 110);
+    color:rgb(153, 153, 153);
   }
   .item-text1 {
     margin-left: 2%;
@@ -236,8 +237,6 @@
     margin-bottom: 1%;
     padding-top: 5px;
     padding-bottom: 5px;
-    border-bottom: solid;
-    border-width: thin;
   }
   .list-share-form-container {
     width: 100%;
@@ -255,6 +254,11 @@
   .list-share-form-cancel {
     float: left;
     margin-left: 2%;
+  }
+  .highlight {
+    background-color: rgb(241, 241, 241);
+    font-size: x-large;
+    font-weight: 100;
   }
 
   .pink {
@@ -338,7 +342,6 @@
           My Lists
         </div>
         <div class="list-title-name"> 
-          {{ current_list }}
         </div>
         <div class="list-title-share" @click="set_list_share_mode(true)"> 
           SHARE
@@ -352,7 +355,12 @@
         <div v-for="listname in get_list_names(lists)">
           <div v-if="listname != 'Cart'">
             <div class="list-name" @click="current_list = listname">
-              {{ listname }}
+              <div v-if="current_list == listname" class="highlight">
+                {{ listname }}
+              </div>
+              <div v-else>
+                {{ listname }}
+              </div>
             </div>
           </div>
         </div>
