@@ -66,11 +66,61 @@ gcs = NQGCS(json_key_path=GCS_KEY_PATH)
 def add():
     redirect(URL('index'))
     return dict()
+
 @action('auth/plugin/index')
 @action.uses(db, auth, 'redirect_to_index.html')
 def add():
     redirect(URL('index'))
     return dict()
+
+@action('obtain_gcs', method="POST")
+@action.uses(url_signer.verify(), db)
+def obtain_gcs():
+    """Returns the URL to do download / upload / delete for GCS."""
+    verb = request.json.get("action")
+    if verb == "PUT":
+        mimetype = request.json.get("mimetype", "")
+        file_name = request.json.get("file_name")
+        extension = os.path.splitext(file_name)[1]
+        # Use + and not join for Windows, thanks Blayke Larue
+        file_path = BUCKET + "/" + str(uuid.uuid1()) + extension
+        # Marks that the path may be used to upload a file.
+        mark_possible_upload=file_path
+        upload_url = gcs_url(GCS_KEYS, file_path, verb='PUT',
+                             content_type=mimetype)
+        return dict(
+            signed_url=upload_url,
+            file_path=file_path
+        )
+    elif verb in ["GET", "DELETE"]:
+        file_path = request.json.get("file_path")
+        if file_path is not None:
+            # We check that the file_path belongs to the user.
+            r = db(db.upload.file_path == file_path).select().first()
+            if r is not None and r.owner == get_user_email():
+                # Yes, we can let the deletion happen.
+                delete_url = gcs_url(GCS_KEYS, file_path, verb='DELETE')
+                return dict(signed_url=delete_url)
+        # Otherwise, we return no URL, so we don't authorize the deletion.
+        return dict(signer_url=None)
+
+@action('notify_upload', method="POST")
+@action.uses(url_signer.verify(), db)
+def notify_upload():
+    """We get the notification that the file has been uploaded."""
+    file_type = request.json.get("file_type")
+    file_name = request.json.get("file_name")
+    file_path = request.json.get("file_path")
+    file_size = request.json.get("file_size")
+    print("File was uploaded:", file_path, file_name, file_type)
+
+    d = datetime.datetime.utcnow()
+
+    # Returns the file information.
+    return dict(
+        download_url=gcs_url(GCS_KEYS, file_path, verb='GET'),
+        file_date=d,
+    )
 
 @action('index')
 @action.uses(db, auth, 'index.html')
@@ -91,6 +141,8 @@ def collection():
         get_images_url = URL('get_images', signer=url_signer),
         load_user_lists_url = URL('load_user_lists', signer=url_signer),
         create_user_list_url = URL('create_user_list', signer=url_signer),
+        obtain_gcs_url = URL('obtain_gcs', signer=url_signer),
+        notify_url = URL('notify_upload', signer=url_signer),
 
         get_rating_url = URL('get_rating', signer=url_signer),
         get_name_url = URL('get_name', signer=url_signer),
@@ -127,6 +179,8 @@ def item(item_id=None):
         get_images_url = URL('get_images', signer=url_signer),
         load_user_lists_url = URL('load_user_lists', signer=url_signer),
         create_user_list_url = URL('create_user_list', signer=url_signer),
+        obtain_gcs_url = URL('obtain_gcs', signer=url_signer),
+        notify_url = URL('notify_upload', signer=url_signer),
 
         get_rating_url = URL('get_rating', signer=url_signer),
         get_name_url = URL('get_name', signer=url_signer),
@@ -150,6 +204,8 @@ def lists():
         get_images_url = URL('get_images', signer=url_signer),
         load_user_lists_url = URL('load_user_lists', signer=url_signer),
         create_user_list_url = URL('create_user_list', signer=url_signer),
+        obtain_gcs_url = URL('obtain_gcs', signer=url_signer),
+        notify_url = URL('notify_upload', signer=url_signer),
 
         remove_list_item_url = URL('remove_list_item', signer=url_signer),
         delete_list_url = URL('delete_list', signer=url_signer),
@@ -177,6 +233,8 @@ def cart():
         get_images_url = URL('get_images', signer=url_signer),
         load_user_lists_url = URL('load_user_lists', signer=url_signer),
         create_user_list_url = URL('create_user_list', signer=url_signer),
+        obtain_gcs_url = URL('obtain_gcs', signer=url_signer),
+        notify_url = URL('notify_upload', signer=url_signer),
 
         remove_list_item_url = URL('remove_list_item', signer=url_signer),
         delete_list_url = URL('delete_list', signer=url_signer),
