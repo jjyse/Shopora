@@ -60,19 +60,6 @@ with open(GCS_KEY_PATH) as gcs_key_f:
 # I create a handle to gcs, to perform the various operations.
 gcs = NQGCS(json_key_path=GCS_KEY_PATH)
 
-
-@action('auth/plugin/index#')
-@action.uses(db, auth, 'redirect_to_index.html')
-def add():
-    redirect(URL('index'))
-    return dict()
-
-@action('auth/plugin/index')
-@action.uses(db, auth, 'redirect_to_index.html')
-def add():
-    redirect(URL('index'))
-    return dict()
-
 @action('obtain_gcs', method="POST")
 @action.uses(url_signer.verify(), db)
 def obtain_gcs():
