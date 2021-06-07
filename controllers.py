@@ -25,11 +25,22 @@ session, db, T, auth, and tempates are examples of Fixtures.
 Warning: Fixtures MUST be declared with @action.uses({fixtures}) else your app will result in undefined behavior
 """
 
+import datetime
+import json
+import os
+import traceback
+import uuid
+
+# C:\Users\14086\anaconda3\Lib\site-packages for google package
+from nqgcs import NQGCS
+
 from py4web import action, request, abort, redirect, URL
 from yatl.helpers import A
 from .common import db, session, T, cache, auth, logger, authenticated, unauthenticated, flash
 from py4web.utils.url_signer import URLSigner
 from .models import get_user_email, get_user
+from .settings import APP_FOLDER
+from .gcs_url import gcs_url
 
 url_signer = URLSigner(session)
 
@@ -38,6 +49,28 @@ from .settings import APP_FOLDER
 import os
 import json
 JSON_FILE = os.path.join(APP_FOLDER, "data", "items.json")
+
+# Imports to load google cloud storage (bucket)
+BUCKET = '/shopora-1-bucket'
+# GCS keys.  You have to create them for this to work.  See README.md
+GCS_KEY_PATH = os.path.join(APP_FOLDER, 'private/gcs_keys.json')
+with open(GCS_KEY_PATH) as gcs_key_f:
+    GCS_KEYS = json.load(gcs_key_f)
+
+# I create a handle to gcs, to perform the various operations.
+gcs = NQGCS(json_key_path=GCS_KEY_PATH)
+
+
+@action('auth/plugin/index#')
+@action.uses(db, auth, 'redirect_to_index.html')
+def add():
+    redirect(URL('index'))
+    return dict()
+@action('auth/plugin/index')
+@action.uses(db, auth, 'redirect_to_index.html')
+def add():
+    redirect(URL('index'))
+    return dict()
 
 @action('index')
 @action.uses(db, auth, 'index.html')
