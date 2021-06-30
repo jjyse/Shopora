@@ -37,7 +37,3 @@ The three main features of Shopora are:
 2. Provide a ratings and reviews section for each item so that shoppers can make better purchasing decisions.
 3.  Implement a list system so shoppers can organize items and share selected items with other shoppers. 
 
-Feature (1) was implemented using vue.js and css grid. The only issue is that my grid has spacing issues when on chrome browser whereas firefox browser works as intended. Feature (2) was implemented using vue.js and google cloud storage. Images are also allowed to be attached to reviews and are sent to gcs. I believe I was supposed to write the database in MySQL but due to lack of time I will not be converting it. So, it just stores data using SQLite. Aside from this issue, this feature works as intended. Feature (3) was implemented using vue.js. This feature works as intended.
-#  Is Shopora deployed? 
-Deployment was attempted, but not successful due to my database being in SQLite3.
-
