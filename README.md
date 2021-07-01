@@ -15,7 +15,7 @@ Homepage/Display page:
 
 Sign In page: 
 - Route: /Shopora/auth/login
-- Purpose: Secure sign in using google oauth (removed - page will not load if user does not have both first and last name filled in their google account).
+- Purpose: Secure sign in using google oauth.
 
 Create an account page:
 - Route: /Shopora/auth/register
