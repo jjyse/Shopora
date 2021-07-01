@@ -82,24 +82,19 @@
           </div>
 
           [[if globals().get('user'):]]
-            <div class="navbar-item has-dropdown is-hoverable">
-              <a class="navbar-link is-primary">
-                [[=globals().get('user').get('email')]]
-              </a>
-              <div class="navbar-dropdown">
-                <a class="navbar-item" href="[[=URL('auth/logout')]]">Logout</a>
-                <a class="navbar-item" href="[[=URL('auth/profile')]]">Profile</a>
-                <a class="navbar-item" href="[[=URL('auth/change_password')]]">Change Password</a>
-              </div>
-            </div>
-          [[else:]]
-            <a class="navbar-item is-size-6 has-text-weight-normal" href="[[=URL('auth/login')]]">
-              Login
-            </a>
-            <a class="navbar-item is-size-6 has-text-weight-normal" href="[[=URL('auth/register')]]">
-              Register
-            </a>
+          <div class="navbar-item">
+            <p>[[=globals().get('user').get('email')]]</p>
+          </div>
           [[pass]]
+          <div class="navbar-item">
+            <div class="buttons">
+              [[if globals().get('user'):]]
+              <a class="button is-light" href="[[=URL('auth/logout')]]">Sign out</a>
+              [[else:]]
+              <a class="button is-link" href="[[=URL('auth/plugin/oauth2google/login', vars=dict(next=URL('index')))]]">Sign In</a>
+              [[pass]]
+            </div>
+          </div>
 
           <div class="navbar-item is-size-6 has-text-weight-normal">
             <p class="control">
